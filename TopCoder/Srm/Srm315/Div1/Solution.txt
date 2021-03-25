@@ -1,0 +1,176 @@
+Friends
+
+Thành phần liên thông:
+
+Là một tập hợp gồm các đỉnh của đồ thị sao cho với 2 đỉnh (u, v) bất kì trong 1
+thành phần liên thông thì u luôn có đường đi sang v và ngược lại.
+
+ans: Là số lượng đỉnh trong thành phần liên thông có nhiều đỉnh nhất.
+
+procedure DFS(u)
+  visited[u] = true
+  cnt += 1
+  for v kề u:
+    nếu visited[v] == false:
+      DFS(v)
+
+
+Với mỗi đỉnh u từ 1 -> N:
+  Nếu visited[u] == false:
+    cnt = 0
+    DFS(u)
+    cập nhật ans
+
+O(V * (V + E)) = O(T * (N + M))
+
+*****************************************************************
+
+Lakes in Berland:
+
+(x, y) sẽ kề với ô (x + 1, y) và (x, y + 1) và (x - 1, y) và (x, y - 1).
+
+Hòn đảo kích thước là N * M.
+Xung quanh hòn đảo là biển !!!!!
+Biển là một tập hợp các ô nước thỏa mãn tính chất như sau:
+1. Các ô nước phải được nối với nhau theo tính chất kề cạnh.
+2. Có 1 hoặc nhiều ô nước nằm trên cạnh của hòn đảo.
+
+
+Bước 1: Duyệt các ô nước trên cạnh của bản đồ và gọi DFS để lấp biển. O(N * M)
+Bước 2: Duyệt với mọi ô (x, y) trên bản đồ:
+Nếu a[x][y] == '.':
+   DFS(x, y)
+   Lưu bộ 3 số (cnt, x, y) vào một mảng động.
+
+====> O(N + M)
+
+Bước 3: Tái tạo lại bản đồ. O(N * M)
+Bước 4: Sắp xếp lại bộ 3 số (cnt, x, y) theo chiều tăng dần của cnt.
+
+~ N * M cái hồ.
+
+
+=====> O(N * M * log(N * M))
+Bước 5: Duyệt n - k bộ 3 số đầu tiên, lấy tổng các cnt, đồng thời gọi DFS với (x, y).
+
+O(N * M)
+*************************************************************
+*.*.*.*.*.*.*
+**.*.*.*.*.*.
+*
+*
+*
+*
+*
+*
+************************************************************
+
+Tọa độ (1, 5) ===> 9 ô nước
+Tọa độ (3, 3) ===> 1 ô nước
+Tọa độ (4, 1) ===> 2 ô nước
+
+Đề yêu cầu còn lại k hồ ====> lấp n - k hồ.
+
+(1, <3, 3>); (2, <4, 1>); (9, <1, 5>)
+
+
+********
+*****..*
+*****..*
+***.*.**
+*..**.**
+****..**
+*****.**
+*...****
+**.*****
+**.***..
+**.*****
+
+Procedure DFS(x, y)
+  a[x][y] = '*'
+  for (xx, yy) kề với (x, y)
+    xx = x + dx[i]
+    yy = y + dy[i]
+    nếu (xx, yy) thuộc bản đồ và a[xx][yy] là nước:
+       DFS(xx, yy)
+
+Độ phức tạp: O(N * M * log(N * M))
+
+**************************************************
+Dudu and service maker
+
+Cho một đồ thị gồm các cạnh có hướng.
+Xác định xem đồ thị đã cho có chu trình hay không ?????
+
+x1 -> x2 -> x3 -> ...... -> x1
+
+status[u]: Trạng thái của đỉnh u trong quá trình duyệt DFS đã xét.
+
+status[u] = 0: Đỉnh u chưa được thăm
+status[u] = 1: Đỉnh u đã được thăm
+status[u] = 2: Đỉnh u đã được thăm và nếu tiếp tục đi vào u sẽ không thể nào phát hiện được
+một chu trình.
+
+Procedure DFS (u)
+   status[u] = 1
+   for v kề với u:
+     nếu visited[v] == 0:
+       DFS(v)
+       visited[v] = 2
+     else nếu visited[v] == 1:
+       Kết luận có chu trình và dừng thuật toán.
+
+Độ phức tạp thuật toán: O((V + E) * T).
+
+*****************************************************
+
+Monk and multiplication
+
+Cách thô thiển:
+
+Với mỗi giá trị i, duyệt với mọi j từ 1 -> i và tìm ra 3 số lớn nhất.
+
+===> Độ phức tạp: O(N^2).
+
+Cách tối ưu:
+
+Tạo một max-heap dùng để chứa các phần tử từ 1 -> i.
+
+Với phần tử a[i] hiện tại:
+. Đưa phần tử a[i] vào max - heap
+. Lấy 3 phần tử có giá trị lớn nhất ra khỏi max - heap và tính kết quả
+. Đưa 3 phần tử có giá trị lớn nhất vào lại max - heap.
+
+i: 1 -> N:
+  Độ phức tạp là O(logN)
+
+Độ phức tạp: O(NlogN).
+
+*******************************************
+
+Monk and champions league
+
+3 hàng ghế:
+hàng 1: 1 ghế trống
+hàng 2: 2 ghế trống
+hàng 3: 4 ghế trống.
+
+4 người hâm mộ.
+
+Người 1: 4 pound
+Người 2: 3 pound
+Người 3: 2 pound
+Người 4: 2 pound
+
+==> 4 + 3 + 2 + 2 = 11 pound.
+
+
+
+
+
+
+
+
+
+
+
