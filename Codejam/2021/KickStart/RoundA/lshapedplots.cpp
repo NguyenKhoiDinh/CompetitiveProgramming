@@ -1,85 +1,23 @@
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
 using namespace std;
 const int MAX_N = 1005;
 int numTest;
 int R, C, res = 0;
 int a[MAX_N][MAX_N];
-int sumRow[MAX_N][MAX_N];
-int sumCol[MAX_N][MAX_N];
+int Up[MAX_N][MAX_N], Right[MAX_N][MAX_N], Down[MAX_N][MAX_N], Left[MAX_N][MAX_N];
 
-void solve(int directRow, int directCol, int x, int y) {
-  int l, r;
-  int len1 = -1, len2 = -1;
-  if (directRow == 0) {
-    r = y;
-    l = 1;
+int calc(int x, int y) {
+  int sum = 0; 
+  if (min(x / 2, y) > 1) {
+    sum += min(x / 2, y) - 1; 
   }
-  else {
-    l = y;
-    r = C;
+  if (min(x, y / 2) > 1) {
+    sum += min(x, y / 2) - 1; 
   }
-  while (l <= r) {
-    int mid = (l + r) >> 1;
-    if (directRow == 0) {
-      int numOnes = sumRow[x][y] - sumRow[x][mid - 1];
-      if (numOnes == y - mid + 1) {
-        len1 = numOnes;
-        r = mid - 1;
-      }
-      else {
-        l = mid + 1;
-      }
-    }
-    else {
-      int numOnes = sumRow[x][mid] - sumRow[x][y - 1];
-      if (numOnes == mid - y + 1) {
-        len1 = numOnes;
-        l = mid + 1;
-      }
-      else {
-        r = mid - 1;
-      }
-    }
-  }
-  if (directCol == 0) {
-    l = 1;
-    r = x;
-  }
-  else {
-    l = x;
-    r = R;
-  }
-  while (l <= r) {
-    int mid = (l + r) >> 1;
-    if (directCol == 0) {
-      int numOnes = sumCol[x][y] - sumCol[mid - 1][y];
-      if (numOnes == x - mid + 1) {
-        len2 = numOnes;
-        r = mid - 1;
-      }
-      else {
-        l = mid + 1;
-      }
-    }
-    else {
-      int numOnes = sumCol[mid][y] - sumCol[x - 1][y];
-      if (numOnes == mid - x + 1) {
-        len2 = numOnes;
-        l = mid + 1;
-      }
-      else {
-        r = mid - 1;
-      }
-    }
-  }
-  if (len1 > 1 && len2 > 3) {
-    res += min(len1, len2 / 2) - 1;
-  }
-  if (len1 > 3 && len2 > 1) {
-    res += min(len1 / 2, len2) - 1;
-  }
+  return sum;
 }
 
 int main () {
@@ -91,34 +29,57 @@ int main () {
     cin >> R >> C;
     for (int i = 1; i <= R; i++) {
       for (int j = 1; j <= C; j++) {
-        cin >> a[i][j];
-        sumRow[i][j] = 0;
-        sumCol[i][j] = 0;
+        cin >> a[i][j]; 
       }
     }
-    for (int i = 1; i <= R; i++) {
-      for (int j = 1; j <= C; j++) {
-        sumRow[i][j] = sumRow[i][j - 1] + a[i][j];
+    for (int i = 0; i <= R + 1; i++) {
+      for (int j = 0; j <= C + 1; j++) {
+        Up[i][j] = 0;
+        Right[i][j] = 0;
+        Down[i][j] = 0;
+        Left[i][j] = 0;
       }
     }
     for (int j = 1; j <= C; j++) {
       for (int i = 1; i <= R; i++) {
-        sumCol[i][j] = sumCol[i - 1][j] + a[i][j];
+        if (a[i][j] == 1) {
+          Up[i][j] = Up[i - 1][j] + 1; 
+        }
+      }
+      for (int i = R; i >= 1; i--) {
+        if (a[i][j] == 1) {
+          Down[i][j] = Down[i + 1][j] + 1; 
+        }
       }
     }
-    res = 0;
     for (int i = 1; i <= R; i++) {
       for (int j = 1; j <= C; j++) {
-        if (a[i][j] == 0) {
-          continue;
+        if (a[i][j] == 1) {
+          Left[i][j] = Left[i][j - 1] + 1; 
         }
-        solve(0, 0, i, j);
-        solve(0, 1, i, j);
-        solve(1, 0, i, j);
-        solve(1, 1, i, j);
+      }
+      for (int j = C; j >= 1; j--) {
+        if (a[i][j] == 1) {
+          Right[i][j] = Right[i][j + 1] + 1; 
+        }
       }
     }
-    cout << res << endl;
+    long long ans = 0LL; 
+    for (int i = 1; i <= R; i++) {
+      for (int j = 1; j <= C; j++) {
+        if (a[i][j] == 1) {
+          int U = Up[i][j];
+          int R = Right[i][j];
+          int D = Down[i][j];
+          int L = Left[i][j];
+          ans += calc(U, R);
+          ans += calc(R, D);
+          ans += calc(D, L);
+          ans += calc(L, U); 
+        }
+      }
+    }
+    cout << ans << endl;
   }
   return 0;
 }
