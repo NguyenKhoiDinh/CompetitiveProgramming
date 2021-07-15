@@ -76,8 +76,8 @@ class BearDestroysDiv2 {
 BearDestroysDiv2 B;
 
 int main () {
-  cout << B.sumUp(5,
-4,
-3);
+  cout << B.sumUp(2,
+3,
+1000000007);
   return 0;
 }
