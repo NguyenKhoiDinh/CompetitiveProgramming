@@ -1,0 +1,171 @@
+DHOOM4
+
+Xem các đỉnh từ 0 -> 99999 là các đỉnh trên một đồ thị và các đỉnh hoàn toàn rời rạc nhau.
+
+Gọi dist[u] là độ dài đường đi ngắn nhất từ đỉnh start đến đỉnh u.
+Khởi tạo toàn bộ các dist[u] = -1.
+
+Đưa đỉnh start vào hàng đợi.
+dist[start] = 0.
+
+Trong lúc hàng đợi chưa rỗng:
+   Lấy đỉnh u ra khỏi hàng đợi.
+   Duyệt những đỉnh v kề với u:
+      v = (u * key[i]) % 100000 // v kề với u.
+      Hỏi dist[v] == -1:
+         dist[v] = dist[u] + 1
+         Đưa v vào hàng đợi.
+         Nếu v == end:
+            In ra dist[v]
+            Dừng hẳn thuật toán.
+
+In ra -1.
+
+Độ phức tạp: O(V + V * N) (với V = 100000)
+
+***********************************************************
+
+KnightMove
+
+Coi các ô (x, y) trên bàn cờ là những đỉnh của đồ thị. (x: 1 -> 8, y: 1 -> 8).
+e2 ==> (5, 2)
+g8 ==> (7, 8)
+
+b2 ==> c3
+(2, 2) ===> (3, 3).
+
+dist[x][y]: Độ dài đường đi ngắn nhất từ đỉnh (startx, starty) đến ô (x, y).
+
+Từ một ô (x, y) sẽ nối tới ô (x + dx[i], y + dy[i]).
+
+dx = [1, -1, 1, -1, 2, -2, 2, -2]
+dy = [2, -2, -2, 2, 1, -1, -1, 1]
+
+e4: (5, 4)
+
+Từ (5, 4) -> (5 + 1, 4 + 2) = (6, 6)
+   (5, 4) -> (5 + (-1), 4 + (-2)) = (4, 2)
+
+Khởi tạo các dist[x][y] = -1
+Đưa cặp giá trị (startx, starty) vào hàng đợi.
+dist[startx][starty] = 0.
+
+Trong lúc hàng đợi chưa rỗng:
+   Lấy cặp (x, y) ra khỏi hàng đợi.
+   Duyệt các đỉnh (xx, yy) kề với (x, y)
+      xx = x + dx[i]
+      yy = y + dy[i]
+      Nếu (xx, yy) nằm trong bảng và dist[xx][yy] == -1:
+         dist[xx][yy] = dist[x][y] + 1.
+         Đưa đỉnh (xx, yy) vào hàng đợi.
+
+Kết quả: dist[endx][endy]
+
+Độ phức tạp: O(V + E), V = 8 * 8, E = V * 8. O(V + 8V) = O(9V * T) với V = 8 * 8
+và T là số lượng test case.
+
+*********************************************************
+
+Bitmap:
+
+Mỗi ô (x, y) trên bảng là một đỉnh của đồ thị.
+
+ô (1, 1) kề với ô (1, 2) kề ô (1, 3) kề ô (1, 4).
+
+ô (x, y) sẽ kề với 4 ô:
+(x + 1, y)
+(x, y + 1)
+(x - 1, y)
+(x, y - 1).
+
+(x, y) kề với ô (x + dx[i], y + dy[i])
+
+dx = [1, 0, -1, 0]
+dy = [0, 1, 0, -1]
+
+n = 182, m = 182
+
+00000000000000000000000.....0
+000000000...............00000
+..
+.
+.
+.
+00000000000001000000000000000
+00000000000000000000000000000
+......
+
+Độ phức tạp của BFS là O(V + E) = O(N * M + 4 * N * M)
+= O(5 * N * M) = O(N * M).
+
+Độ phức tạp cho cả bài là
+O(N * M * N * M) = O(N^2 * M^2).
+
+1111
+1111
+1111
+
+1111
+1111
+1111
+
+0001
+0011
+0110
+
+3 2 1 0
+2 1 0 0
+1 0 0 1
+
+
+3 2 1 0
+2 1 0 0
+1 0 0 1
+
+gọi dist[x][y] là độ dài đường đi ngắn nhất từ 1 trong các đỉnh xuất phát đến ô
+(x, y). Khởi tạo các dist[x][y] = -1.
+
+Đưa toàn bộ điểm có giá trị là 1 vào hàng đợi, khởi tạo các dist[x][y] = 0 với
+ô (x, y) = 1.
+
+Trong lúc hàng đợi chưa rỗng:
+   Lấy 1 đỉnh (x, y) ra khỏi hàng đợi.
+   Duyệt các đỉnh (xx, yy) kề với (x, y)
+      Nếu (xx, yy) nằm trong bảng và dist[xx][yy] == -1:
+         dist[xx][yy] = dist[x][y] + 1
+         Đưa (xx, yy) vào hàng đợi.
+
+Độ phức tạp thuật toán:
+
+O(V + E) = O(N * M + N * M * 4) = O(5 * N * M) = O(N * M * T)
+
+**************************************************
+
+Bishu and his girlfriends
+
+Đồ thị dạng cây (Tree)
+
+Đây là một đồ thị gồm N đỉnh và N - 1 cạnh sao cho toàn bộ N đỉnh đều là
+những đỉnh liên thông với nhau. Cạnh phải là cạnh vô hướng.
+
+Gọi dist[u] là độ dài đường đi ngắn nhất từ đỉnh 1 đến đỉnh u.
+
+Sử dụng DFS để tính bảng dist.
+
+Độ phức tạp: O(V + E) = O(N + N - 1) = O(2N - 1) = O(N).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
