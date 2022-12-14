@@ -25,10 +25,6 @@ class MaxOfMin {
     for (int v = 0; v < n; v++) {
       for (map <vector <int>, long long> :: iterator it = dp[v].begin(); it != dp[v].end(); it++) {
         vector <int> curState = it->first;
-        for (int i = 0; i < (int) curState.size(); i++) {
-          cout << curState[i] << "   ";
-        }
-        cout << endl;
         long long curVal = it->second;
         for (int i = 0; i < n; i++) {
           if (F[i] == v + 1) {
@@ -54,7 +50,7 @@ class MaxOfMin {
             (dp[v + 1][nextState] += curVal) %= MOD;
           }
         }
-      }
+      }                         
     }
     state.clear();
     return (int) dp[n][state];

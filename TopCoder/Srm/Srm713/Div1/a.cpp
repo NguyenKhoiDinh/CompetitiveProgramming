@@ -36,4 +36,11 @@ class PowerEquation {
     }
     return (int) res;
   }
-};
+};               
+
+PowerEquation P; 
+
+int main () {
+  cout << P.count(10);
+  return 0; 
+}

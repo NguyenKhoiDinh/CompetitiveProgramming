@@ -1,10 +1,39 @@
-#include <iostream>
-#include <fstream>
+#include <iostream> 
 
 using namespace std;
 
+int min(int a, int b) {
+  int ret = a;
+  if (ret > b) {
+    ret = b;
+  }
+  return ret;
+}
+
+int max(int a, int b) {
+  int ret = a;
+  if (ret < b) {
+    ret = b;
+  }
+  return ret;
+}
+
+void process() {
+  int query;
+  cin >> query;
+  for (int i = 1; i <= query; i++) {
+    int type, a, b;
+    cin >> type >> a >> b;
+    if (type == 0) {
+      cout << min(a, b) << endl;
+    }  
+    else {
+      cout << max(a, b) << endl;
+    }
+  }
+}
+
 int main () {
-  freopen("input.txt", "r", stdin);
-  freopen("output.txt", "w", stdout);
-  return 0;
+  process(); 
+  return 0; 
 }

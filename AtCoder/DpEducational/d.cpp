@@ -1,13 +1,11 @@
-#include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
-const int MAX_N = 105;
-const int MAX_W = 100005;
 struct object {
   int weight, value;
 };
-long long dp[MAX_N][MAX_W];
-object a[MAX_N];
+long long dp[105][100005];
+object a[105];
 int n, W;
 
 int main () {

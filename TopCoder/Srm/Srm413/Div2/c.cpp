@@ -20,7 +20,9 @@ class InfiniteSequence {
     return solve(n, p, q);
   }
 };
+InfiniteSequence I; 
 
 int main () {
+  cout << I.calc(1000000000000,2,3);
   return 0;
 }

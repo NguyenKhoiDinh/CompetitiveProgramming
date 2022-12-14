@@ -10,13 +10,13 @@ class Graph
 {
 public:
   int V;
-  int *level;
+  vector< int> level; 
   vector< Edge > *adj;
   Graph(int V)
   {
     adj = new vector<Edge>[V];
     this->V = V;
-    level = new int[V];
+    level.resize(V); 
   }
 
   void addEdge(int u, int v, int C)

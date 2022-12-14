@@ -1,12 +1,7 @@
-#include <iostream>
-#include <math.h>
-#include <vector>
-#include <algorithm>
-#include <string>
+#include <bits/stdc++.h>
 
-using namespace std;
-const int MAX_N = 3005;
-int dp[MAX_N][MAX_N];
+using namespace std;   
+int dp[3005][3005];
 string s1, s2;
 int len1, len2;
 

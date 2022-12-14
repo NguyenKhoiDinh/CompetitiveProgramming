@@ -81,18 +81,9 @@ class DFSCountEasy {
 DFSCountEasy D;
 
 int main () {
-  cout << D.count({"NYYYYYYYYYYYY",
- "YNYYYYYYYYYYY",
- "YYNYYYYYYYYYY",
- "YYYNYYYYYYYYY",
- "YYYYNYYYYYYYY",
- "YYYYYNYYYYYYY",
- "YYYYYYNYYYYYY",
- "YYYYYYYNYYYYY",
- "YYYYYYYYNYYYY",
- "YYYYYYYYYNYYY",
- "YYYYYYYYYYNYY",
- "YYYYYYYYYYYNY",
- "YYYYYYYYYYYYN"});
+  cout << D.count(  
+{"NYY",
+ "YNY",
+ "YYN"});
   return 0;
 }

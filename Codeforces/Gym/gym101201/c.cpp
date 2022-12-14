@@ -23,16 +23,24 @@ int main () {
   }
   int res = 0;
   if (numbCamera < 2) {
-    for (int j = 1; j <= 2 - numbCamera; j++) {
-      for (int i = r; i >= l; i--) {
-        if (camera[i] == 0) {
-          camera[i] = 1;
-          res++;
-          break;
-        }
+    if (numbCamera == 1) {
+      if (camera[r] == 1) {
+        camera[r - 1] = 1; 
+        numbCamera = 2; 
+        res++; 
+      }
+      else {
+        camera[r] = 1; 
+        numbCamera = 2; 
+        res++; 
       }
     }
-    numbCamera = 2;
+    else {
+      camera[r] = 1; 
+      camera[r - 1] = 1; 
+      numbCamera = 2; 
+      res += 2; 
+    }
   }
   for (int i = r + 1; i <= n; i++) {
     if (camera[i] == 1) {

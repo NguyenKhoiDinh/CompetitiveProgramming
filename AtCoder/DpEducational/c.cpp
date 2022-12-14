@@ -1,10 +1,8 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 
-using namespace std;
-const int MAX_N = 100005;
-int game[MAX_N][3];
-int dp[MAX_N][3];
+using namespace std;     
+int game[100005][3];
+int dp[100005][3];
 int n;
 
 int main () {

@@ -1,0 +1,190 @@
+Khóa học gồm N bài tập thể dục, bài tập thể dục thứ i sẽ có độ khó là a[i] 
+
+các bài tập thể dục đã được sắp xếp tăng dần
+
+Định nghĩa "độ khó" của bài tập thể dục được tính như sau: 
+
+Xét 2 bài thể dục liền kề, tính chênh lệch độ khó giữa 2 bài này: 
+
+Xét 2 bài a[i] và a[i + 1], tính a[i + 1] - a[i] 
+
+Độ khó của toàn bộ khóa học = Max(a[i + 1] - a[i])  
+
+Ví dụ: 
+
+N = 3, K = 1
+
+a = [100, 200, 230] ====> độ khó của khóa học là 100 
+
+có quyền bổ sung không quá K bài tập thể dục
+
+cần bổ sung như thế nào đó để độ khó nhỏ nhất có thể !!!!!!!! 
+
+
+Nhận xét: 
+a = [100, 200, 230] 
+
+======> nhận xét: độ khó của khóa học mà càng giảm thì càng khó để thêm các bài tập thể dục vào và ngược lại. 
+
+a[i] <= 10^9 
+
+===> độ khó của bài tập thể dục sẽ nằm trong đoạn [0 .. 10^9] !!!!!!!!! 
+
+giả sử độ khó của bài tập thể dục là H
+
+H = 49 
+
+số lượng bài học cần thêm vào giữa đoạn a[i] và a[i + 1]: (a[i + 1] - a[i]) / H ====> 2 + 0 = 2 
+
+H = 50 
+
+200 - 100 = 100 / 50 = 2 ---> 1 
+
+số lượng bài học cần thêm: (a[i + 1] - a[i]) / H. Nếu (a[i + 1] - a[i]) chia hết cho H thì giảm xuống 1 đơn vị. 
+
+Nếu tổng số lượng phần tử cần thêm vào <= K ========> OK !!!!
+không thì tìm 1 cái độ khó to hơn !!!
+
+----------------------------------------------------------------------------------------------------------------------- 
+
+Đệ quy: 
+
+Trong hàm có hàm 
+
+Cho số N, tính tổng các số từ 1 -> N. 
+
+int sum = 0;
+for i: 1 -> N:
+   sum = sum + i
+
+nhận xét: 
+
+gọi hàm sum(n) là hàm tính tổng 1 + 2 + 3 + .... + (n - 1) + n = sum(n - 1) + n 
+
+giả sử ta đã biết giá trị của sum(n - 1) 
+
+sum(n) = sum(n - 1) + n
+
+int sum(int n) {
+  if (n == 0) return 0; 
+  return sum(n - 1) + n; 
+}
+
+
+sum(4) = sum(3) + 4 
+sum(3) = sum(2) + 3
+sum(2) = sum(1) + 2
+sum(1) = sum(0) + 1 
+sum(0) = sum(-1) + 0
+sum(-1) = sum(-2) + -1
+.......... 
+
+Điểm dừng: 
+
+Đây là trường hợp tối giản nhất và ta có thể tính toán được đáp án ngay tại thời điểm này 
+
+sum(0) = 0 
+
+. Điểm dừng: tìm ra được trường hợp tối giản nhất để bảo đàm rằng khi gặp điểm dừng thì chương trình sẽ không tiếp 
+tục gọi đệ quy nữa và đã nhận được một đáp án đúng !!!!!! 
+
+. Truy hồi: Khi gọi bài toán lớn dựa trên bài toán nhỏ, phải GIẢ SỬ rằng bài toán nhỏ đã được tối ưu rồi !!!!!!!, tìm cách
+kết nối bài toán hiện tại và bài toán nhỏ hơn. 
+
+--------------------------------------------------------------------
+
+Cho một dãy a gồm N số nguyên dương. Kiểm tra dãy a có phải là dãy đối xứng hay không 
+
+a = [1, 2, 2, 1]
+
+isPalindrome(l, r) = true / false: kiểm tra dãy a từ vị trí l .. r có phải là dãy đối xứng hay không ??????? 
+
+isPalindrome(2, 3) = true
+isPalindrome(2, 4) = false
+
+xét điểm dừng: 
+
+l == r: ===> isPalindrome = true
+l > r: ===> isPalindrome = true
+
+l < r: true nếu: a[l] == a[r] && isPalindrome(l + 1, r - 1) == true 
+
+-----------------------------------------------------------
+
+Tìm x: 
+
+check(i): kiểm tra số x có xuất hiện trong i số đầu tiên của dãy a hay không ??????????? 
+
+x = 5 
+a = [1, 2, 5, 3, 5, 4] 
+
+print(5)
+
+a[5] == 5: 
+
+check(3) = false 
+check(4) = true 
+
+
+check(n): 
+
+nếu n == 0: return false
+nếu a[n] == x: return true 
+return check(n - 1) 
+
+trong hàm main() 
+
+gọi hàm print(n): in ra dãy các vị trí p có a[p] == x 
+
+nếu n == 0: return
+print(n - 1)
+nếu a[n] == x: cout << n << ' '; 
+
+
+void print(int n) {
+  if (n == 0) {
+    return;
+  }
+  print(n - 1);
+  if (a[n] == x) {
+    cout << n << ' ';
+  }
+}
+
+
+
+
+FOFOFOFOFXO.
+
+
+FOXOFOXO
+sum0 = 3 
+sum1 = 2 
+
+ans = p[1] + p[2] + .... + p[n] 
+
+
+ansnew = ans + p1 + len + p2 + len + .... + 
+
+XFOF.XFOFX
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

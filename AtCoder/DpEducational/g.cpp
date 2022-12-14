@@ -1,14 +1,11 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
-const int MAX_N = 100005;
-vector <int> adj[MAX_N];
+vector <int> adj[100005];
 int V, E;
-int dp[MAX_N];
-int countIn[MAX_N];
-bool visited[MAX_N];
+int dp[100005];
+int countIn[100005];
+bool visited[100005];
 vector <int> topo;
 
 void DFS(int u) {

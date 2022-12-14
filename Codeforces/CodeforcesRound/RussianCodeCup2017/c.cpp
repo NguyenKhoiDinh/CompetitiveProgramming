@@ -1,139 +1,126 @@
-#include <iostream>
-#include <cstring>
-#include <string>
-#include <vector>
-#include <fstream>
+#include <iostream> 
+#include <string> 
+#include <vector> 
+#include <cstring> 
+#include <fstream> 
 
-using namespace std;
-const int MAX_N = 2005;
-const long long MOD = 998244353;
-long long dpOdd[2][MAX_N][11], dpEven[2][MAX_N][11];
-long long ways[MAX_N][MAX_N];
-long long fact[MAX_N];
-int numTest, n, half1, half2;
-string a[MAX_N];
-vector <int> even, odd;
-
-void init() {
-  ways[0][0] = 1LL;
-  for (int i = 0; i < MAX_N - 1; i++) {
-    for (int j = 0; j < MAX_N - 1; j++) {
-      if (ways[i][j] == 0) {
-        continue;
-      }
-      (ways[i][j + 1] += ways[i][j]) %= MOD;
-      (ways[i + 1][j] += (1LL * ways[i][j] * (i + 1)) % MOD) %= MOD;
-    }
-  }
-}
-
-void update(long long &a, long long value) {
-  (a += value) %= MOD;
-}
-
-void dynamicProgramming(long long dp[MAX_N][MAX_N][11], vector <int> &a) {
-  int num = (int) a.size();
-  for (int i = 0; i <= 1; i++) {
-    for (int j = 0; j <= num; j++) {
+const long long mod = 998244353LL;
+int numTest; 
+int n;
+std::vector <int> odd, even;     
+long long dp_odd[2][2005][11], dp_even[2][2005][11];
+long long ways[2005][2005];  
+long long fact[2005]; 
+                                       
+void dynamicProgrammingForOddNumbers(const std::vector <int> &a) {
+  int n = (int) a.size(); 
+  dp_odd[0][0][0] = 1; 
+  for (int i = 0; i < n; i++) {
+    int now = i & 1; 
+    int nxt = !now; 
+    std::memset(dp_odd[nxt], 0, sizeof(dp_odd[nxt])); 
+    for (int group = 0; group <= i; group++) {
       for (int r = 0; r < 11; r++) {
-        dp[i][j][r] = 0;
-      }
-    }
-  }
-  dp[0][0][0] = 1LL;
-  for (int i = 0; i < num; i++) {
-    int now = i & 1;
-    int nxt = !now;
-    for (int j = 0; j <= i + 1; j++) {
-      for (int r = 0; r < 11; r++) {
-        dp[nxt][j][r] = 0LL;
-      }
-    }
-    for (int j = 0; j <= i; j++) {
-      for (int r = 0; r < 11; r++) {
-        if (dp[now][j][r] == 0) {
-          continue;
+        if (dp_odd[now][group][r] == 0) {
+          continue; 
         }
-        update(dp[nxt][j + 1][(r + a[i]) % 11], dp[now][j][r]);
-        update(dp[nxt][j][(r - a[i] + 11) % 11], dp[now][j][r]);
+        (dp_odd[nxt][group][(r - a[i] + 11) % 11] += dp_odd[now][group][r]) %= mod; 
+        (dp_odd[nxt][group + 1][(r + a[i]) % 11] += dp_odd[now][group][r]) %= mod; 
       }
     }
   }
 }
 
-void solve() {
-  int numOdd = (int) odd.size();
-  int numEven = (int) even.size();
-  half1 = (numOdd + 1) / 2;
-  half2 = numOdd - half1;
-  dynamicProgramming(dpOdd, odd);
-  dynamicProgramming(dpEven, even);
-  long long res = 0LL;
-  for (int r = 0; r < 11; r++) {
-    for (int i = 0; i <= numEven; i++) {
-      long long mul = 1LL;
-      (mul *= dpOdd[numOdd & 1][half1][r]) %= MOD;
-      (mul *= dpEven[numEven & 1][i][(11 - r) % 11]) %= MOD;
-      (mul *= fact[half1]) %= MOD;
-      (mul *= fact[half2]) %= MOD;
-      (mul *= ways[i][half1]) %= MOD;
-      (mul *= ways[numEven - i][half2 + 1]) %= MOD;
-      (res += mul) %= MOD;
+void dynamicProgrammingForEvenNumbers(const std::vector <int> &a) {
+  int n = (int) a.size(); 
+  dp_even[0][0][0] = 1; 
+  for (int i = 0; i < n; i++) {
+    int now = i & 1; 
+    int nxt = !now; 
+    std::memset(dp_even[nxt], 0, sizeof(dp_even[nxt])); 
+    for (int group = 0; group <= i; group++) {
+      for (int r = 0; r < 11; r++) {
+        if (dp_even[now][group][r] == 0) {
+          continue;                                            
+        }
+        (dp_even[nxt][group + 1][(r - a[i] + 11) % 11] += dp_even[now][group][r]) %= mod; 
+        (dp_even[nxt][group][(r + a[i]) % 11] += dp_even[now][group][r]) %= mod; 
+      }
     }
   }
-  cout << res << endl;
+}
+
+void initWays() {
+  fact[0] = 1LL; 
+  for (int i = 1; i <= 2000; i++) {
+    fact[i] = (1LL * fact[i - 1] * i) % mod; 
+  }
+  for (int i = 0; i <= 2000; i++) {
+    ways[i][1] = 1; 
+  }  
+  for (int j = 0; j <= 2000; j++) {
+    ways[0][j] = 1; 
+  }
+  for (int i = 1; i <= 2000; i++) {
+    for (int j = 2; j <= 2000; j++) {
+      ways[i][j] = (ways[i - 1][j] + ways[i][j - 1]) % mod; 
+    }
+  }
 }
 
 int main () {
-  freopen("input.txt", "r", stdin);
-  freopen("output.txt", "w", stdout);
-  init();
-  fact[0] = 1LL;
-  for (int i = 1; i < MAX_N; i++) {
-    fact[i] = (1LL * fact[i - 1] * i) % MOD;
-  }
-  cin >> numTest;
+  //freopen("input.txt", "r", stdin);
+  //freopen("output.txt", "w", stdout);
+  initWays(); 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cin >> n;
+    std::memset(dp_odd, 0, sizeof(dp_odd)); 
+    std::memset(dp_even, 0, sizeof(dp_even)); 
+    std::cin >> n;
+    odd.clear(); 
+    even.clear(); 
     for (int i = 1; i <= n; i++) {
-      cin >> a[i];
-    }
-    even.clear();
-    odd.clear();
-    for (int i = 1; i <= n; i++) {
-      string s = a[i];
-      int len = (int) s.size();
-      int remain = 0;
-      for (int j = 0; j < len; j += 2) {
-        remain += s[j] - '0';
-        remain %= 11;
-      }
-      for (int j = 1; j < len; j += 2) {
-        remain -= s[j] - '0';
-        remain += 11;
-        remain %= 11;
+      std::string s; 
+      std::cin >> s; 
+      int len = (int) s.size(); 
+      int sum = 0; 
+      for (int j = 0; j < len; j++) {
+        if (j % 2 == 0) {
+          (sum += s[j] - '0') %= 11; 
+        }
+        else {
+          sum -= s[j] - '0'; 
+          (sum += 11) %= 11; 
+        }
       }
       if (len % 2 == 1) {
-        odd.push_back(remain);
+        odd.push_back(sum); 
       }
       else {
-        even.push_back(remain);
+        even.push_back(sum); 
       }
     }
-    if (odd.empty() == true) {
-      int sum = 0;
-      for (int i = 0; i < (int) even.size(); i++) {
-        (sum += even[i]) %= 11;
-      }
-      if (sum == 0) {
-        cout << fact[n] << endl;
-      }
-      else {
-        cout << 0 << endl;
-      }
-      continue;
+    dynamicProgrammingForOddNumbers(odd);
+    dynamicProgrammingForEvenNumbers(even);
+    int szOdd = (int) odd.size(); 
+    int szEven = (int) even.size(); 
+    int halfOdd = (szOdd + 1) / 2; 
+    long long ans = 0LL;
+    for (int rOdd = 0; rOdd < 11; rOdd++) {
+      int rEven = (11 - rOdd) % 11; 
+      for (int evenInOddGroup = 0; evenInOddGroup <= szEven; evenInOddGroup++) {
+        long long mul = dp_odd[szOdd & 1][halfOdd][rOdd];
+        (mul *= fact[halfOdd]) %= mod;              
+        (mul *= fact[szOdd - halfOdd]) %= mod; 
+        (mul *= dp_even[szEven & 1][evenInOddGroup][rEven]) %= mod; 
+        (mul *= ways[evenInOddGroup][halfOdd]) %= mod; 
+        (mul *= ways[szEven - evenInOddGroup][szOdd + 1 - halfOdd]) %= mod; 
+        (mul *= fact[evenInOddGroup]) %= mod; 
+        (mul *= fact[szEven - evenInOddGroup]) %= mod;
+        (ans += mul) %= mod; 
+      } 
     }
-    solve();
+    std::cout << ans << std::endl;  
   }
-  return 0;
+  return 0; 
 }

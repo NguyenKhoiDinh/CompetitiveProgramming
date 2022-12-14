@@ -1,14 +1,12 @@
-#include <iostream>
+#include <bits/stdc++.h>
 
-using namespace std;
-const int MAX_N = 105;
-const int MAX_VALUE = 100005;
+using namespace std;         
 const int inf = 1000000007;
 struct object {
   int weight, value;
 };
-int dp[MAX_N][MAX_VALUE];
-object a[MAX_N];
+int dp[105][100005];
+object a[105];
 int n, W, sumValue = 0;
 
 int main () {

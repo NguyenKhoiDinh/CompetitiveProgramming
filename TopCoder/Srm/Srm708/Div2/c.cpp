@@ -43,5 +43,7 @@ int main () {
 }
 
 /*
-axbcba
+  abbaaaba 
+  dp[4][6] = 
+
 */
