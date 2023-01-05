@@ -1,14 +1,13 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream> 
+#include <string>    
 int numTest; 
 
 int main () {
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": "; 
-    string N; 
-    cin >> N;
+    std::cout << "Case #" << testCase << ": "; 
+    std::string N; 
+    std::cin >> N;
     int sum = 0; 
     for (int i = 0; i < (int) N.size(); i++) {
       (sum += (N[i] - '0')) %= 9; 
@@ -18,16 +17,16 @@ int main () {
     bool found = false; 
     for (int i = 0; i < (int) N.size(); i++) {
       if (sum + '0' < N[i] && canWrite == true && found == false) {
-        cout << sum; 
+        std::cout << sum; 
         found = true;
       } 
       canWrite = true; 
-      cout << N[i]; 
+      std::cout << N[i]; 
     } 
     if (found == false) {
-      cout << sum;
+      std::cout << sum;
     }
-    cout << endl; 
+    std::cout << std::endl; 
   }
   return 0; 
 }

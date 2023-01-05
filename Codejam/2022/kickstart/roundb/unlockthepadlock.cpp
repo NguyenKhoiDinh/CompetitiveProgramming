@@ -1,6 +1,5 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream>
+#include <math.h> 
 const long long inf = 10000000000007LL; 
 int numTest; 
 long long dp[405][405][2]; 
@@ -9,16 +8,16 @@ int n;
 long long D; 
 
 long long value(int p1, int p2) {
-  return min(abs(a[p1] - a[p2]), D - abs(a[p1] - a[p2])); 
+  return std::min(std::abs(a[p1] - a[p2]), D - std::abs(a[p1] - a[p2])); 
 }
 
 int main () {
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": ";
-    cin >> n >> D;
+    std::cout << "Case #" << testCase << ": ";
+    std::cin >> n >> D;
     for (int i = 1; i <= n; i++) {
-      cin >> a[i]; 
+      std::cin >> a[i]; 
     } 
     a[0] = 0; 
     a[n + 1] = 0;
@@ -35,12 +34,12 @@ int main () {
     }                       
     for (int i = n - 1; i >= 1; i--) {
       for (int j = i + 1; j <= n; j++) {
-        dp[i][j][0] = min(dp[i + 1][j][0] + value(i, i - 1), dp[i][j - 1][1] + value(j, i - 1)); 
-        dp[i][j][1] = min(dp[i + 1][j][0] + value(i, j + 1), dp[i][j - 1][1] + value(j, j + 1)); 
+        dp[i][j][0] = std::min(dp[i + 1][j][0] + value(i, i - 1), dp[i][j - 1][1] + value(j, i - 1)); 
+        dp[i][j][1] = std::min(dp[i + 1][j][0] + value(i, j + 1), dp[i][j - 1][1] + value(j, j + 1)); 
       }                                                                                
     }
-    long long ans = min(dp[1][n][0], dp[1][n][1]); 
-    cout << ans << endl; 
+    long long ans = std::min(dp[1][n][0], dp[1][n][1]); 
+    std::cout << ans << std::endl; 
   }
   return 0; 
 }

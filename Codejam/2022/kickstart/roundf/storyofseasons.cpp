@@ -1,61 +1,58 @@
-#include <iostream>
-#include <utility>  
-#include <math.h> 
-#include <algorithm> 
+#include <iostream> 
+#include <set>
+#include <utility>
+#include <map> 
+#include <vector> 
+#include <math.h>
+int numTest; 
 struct seed {
-  long long numb, days, cost;
-  long long deadline; 
-  bool operator < (const seed &other) const {
-    return deadline > other.deadline; 
-  }
+  long long numb, days, cost; 
 };
-int numTest;
 int n;
-seed a[100005];
-long long X, D;  
+long long D, X; 
 
 int main () {
   std::cin >> numTest;
   for (int testCase = 1; testCase <= numTest; testCase++) {
     std::cout << "Case #" << testCase << ": "; 
     std::cin >> D >> n >> X; 
-    for (int i = 1; i <= n; i++) {
-      std::cin >> a[i].numb >> a[i].days >> a[i].cost; 
-      a[i].deadline = D - a[i].days; 
+    std::vector <seed> listSeeds; 
+    listSeeds.resize(n); 
+    for (int i = 0; i < n; i++) {
+      std::cin >> listSeeds[i].numb >> listSeeds[i].days >> listSeeds[i].cost; 
     }
-    std::sort(a + 1, a + n + 1); 
-    long long lastDays = D;
-    long long numbDays = 0LL;
-    long long remain = 0LL; 
+    std::map <long long, std::vector <int> > deadlines; 
+    deadlines[0] = std::vector <int>();
+    for (int i = 0; i < n; i++) {
+      if (D - listSeeds[i].days <= 0) {
+        continue; 
+      }
+      deadlines[D - listSeeds[i].days].push_back(i); 
+    }
+    std::set <std::pair <long long, int> > have; 
+    long long lastDay = D + 1; 
     long long ans = 0LL; 
-    std::priority_queue <std::pair <long long, long long> > pq; 
-    for (int i = 1; i <= n; i++) {
-      pq.push(std::make_pair(a[i].cost, a[i].numb));
-      numbDays += lastDays - a[i].deadline;
-      while (!pq.empty()) {
-        std::pair <long long, long long> pqTop = pq.top();
-        pq.pop();
-        long long number = a[i].numb;
-        long long cost = a[i].cost;
-        if (remain >= number) {
-          remain -= number;
-          ans += number * cost;
-          number = 0; 
-        }   
-        else {       
-          number -= remain; 
-          ans += remain * cost;
-          remain = 0; 
+    for (std::map <long long, std::vector <int> >::reverse_iterator it = deadlines.rbegin(); it != deadlines.rend(); it++) { 
+      long long cntSeeds = (lastDay - it->first) * X;
+      while (have.empty() == false && cntSeeds > 0) {
+        int id = have.begin()->second;
+        have.erase(have.begin());
+        long long used = std::min(listSeeds[id].numb, cntSeeds); 
+        listSeeds[id].numb -= used; 
+        cntSeeds -= used; 
+        ans += used * listSeeds[id].cost; 
+        if (listSeeds[id].numb > 0) {
+          have.insert(std::make_pair(-listSeeds[id].cost, id)); 
         }
-        long long needDays = number / X;
-        long long minDays = std::min(numbDays, needDays); 
-        numbDays -= minDays; 
-        needDays -= minDays;
-        ans += minDays * X * cost;
-        number -= minDays * X;
-
-      }   
-    }  
+      }
+      std::vector <int> &v = it->second; 
+      for (int i = 0; i < (int) v.size(); i++) {
+        int id = v[i]; 
+        have.insert(std::make_pair(-listSeeds[id].cost, id)); 
+      }
+      lastDay = it->first; 
+    }
+    std::cout << ans << std::endl; 
   }
   return 0; 
 }

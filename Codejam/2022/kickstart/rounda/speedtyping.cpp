@@ -1,14 +1,13 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream> 
+#include <string>    
 int numTest; 
-string P, I; 
+std::string P, I; 
 
 int main () {
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": "; 
-    cin >> P >> I; 
+    std::cout << "Case #" << testCase << ": "; 
+    std::cin >> P >> I; 
     int p = 0; 
     int q = 0; 
     while (true) {
@@ -27,10 +26,10 @@ int main () {
       }
     }
     if (p == (int) P.size()) {
-      cout << (int) I.size() - (int) P.size() << endl; 
+      std::cout << (int) I.size() - (int) P.size() << std::endl; 
     }
     else {
-      cout << "IMPOSSIBLE" << endl; 
+      std::cout << "IMPOSSIBLE" << std::endl; 
     }
   }
   return 0; 

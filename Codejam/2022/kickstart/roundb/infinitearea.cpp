@@ -1,17 +1,15 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream> 
+#include <math.h>
+#include <iomanip>
 int numTest; 
-const double PI = acos(-1); 
+const double PI = std::acos(-1); 
 long long R, A, B; 
 
 int main () {
-  //freopen("input.txt", "r", stdin);
-  //freopen("output.txt", "w", stdout);
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": ";
-    cin >> R >> A >> B;
+    std::cout << "Case #" << testCase << ": ";
+    std::cin >> R >> A >> B;
     double sum = 0.0;
     bool flag = true; 
     while (R > 0) {
@@ -24,7 +22,7 @@ int main () {
       }
       flag = !flag; 
     }  
-    cout << fixed << setprecision(12) << sum * PI << endl; 
+    std::cout << std::fixed << std::setprecision(12) << sum * PI << std::endl; 
   }
   return 0; 
 }

@@ -1,31 +1,30 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <algorithm> 
 int numTest;
 int n;
-string s;  
+std::string s;  
 int dp[50005][33]; 
 
 bool checkPalind(int mask, int maxbit) {
-  string trace = "";
+  std::string trace = "";
   for (int i = 0; i <= maxbit; i++) {
     int bit = ((mask & (1 << i)) > 0); 
     trace += (char) (bit + '0'); 
   } 
-  string rev_trace = trace;
-  reverse(rev_trace.begin(), rev_trace.end()); 
-  return (trace == rev_trace); 
+  std::string rev_trace = trace;
+  std::reverse(rev_trace.begin(), rev_trace.end()); 
+  return (trace != rev_trace); 
 }
                 
 int main () {
-  //freopen("input.txt", "r", stdin);
-  //freopen("output.txt", "w", stdout);
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": "; 
-    cin >> n;
-    cin >> s; 
-    memset(dp, 0, sizeof(dp));
+    std::cout << "Case #" << testCase << ": "; 
+    std::cin >> n;
+    std::cin >> s; 
+    std::memset(dp, 0, sizeof(dp));
     dp[0][0] = 1;
     for (int i = 0; i < n; i++) {
       for (int mask = 0; mask < (1 << 5); mask++) {
@@ -79,7 +78,7 @@ int main () {
         break; 
       }
     } 
-    cout << (ans == true ? "POSSIBLE" : "IMPOSSIBLE") << endl; 
+    std::cout << (ans == true ? "POSSIBLE" : "IMPOSSIBLE") << std::endl; 
   }
   return 0; 
 }

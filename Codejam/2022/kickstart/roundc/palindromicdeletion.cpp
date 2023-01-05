@@ -1,9 +1,9 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream> 
+#include <string>
+#include <cstring>
 const long long mod = 1000000007; 
 int numTest; 
-string s; 
+std::string s; 
 int n; 
 long long fact[405], invFact[405]; 
 long long dp[405][405][405]; 
@@ -30,15 +30,13 @@ void init() {
 }
 
 int main () {
-  //freopen("input.txt", "r", stdin);
-  //freopen("output.txt", "w", stdout);
   init(); 
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": "; 
-    cin >> n;
-    cin >> s;
-    memset(dp, 0, sizeof(dp));
+    std::cout << "Case #" << testCase << ": "; 
+    std::cin >> n;
+    std::cin >> s;
+    std::memset(dp, 0, sizeof(dp));
     for (int i = 1; i <= n; i++) {
       for (int j = i; j <= n; j++) {
         dp[i][j][1] = j - i + 1;
@@ -67,7 +65,7 @@ int main () {
       (ans += mul) %= mod;  
     }
     (ans *= invFact[n]) %= mod; 
-    cout << ans << endl; 
+    std::cout << ans << std::endl; 
   }
   return 0; 
 }      

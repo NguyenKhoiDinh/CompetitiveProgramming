@@ -1,14 +1,14 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream>
+#include <string> 
+#include <vector>
 int numTest; 
 bool visited[205][205]; 
-string a[205]; 
+std::string a[205]; 
 int R, C; 
 char direction[4] = {'E', 'S', 'W', 'N'}; 
 int dx[4] = {0, 1, 0, -1}; 
 int dy[4] = {1, 0, -1, 0}; 
-vector <char> ans;
+std::vector <char> ans;
 
 void dfs(int x, int y, int dir) {
   visited[x][y] = true;
@@ -28,14 +28,12 @@ void dfs(int x, int y, int dir) {
 }
     
 int main () {
-  //freopen("input.txt", "r", stdin);
-  //freopen("output.txt", "w", stdout);
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": "; 
-    cin >> R >> C;
+    std::cout << "Case #" << testCase << ": "; 
+    std::cin >> R >> C;
     for (int i = 0; i < R; i++) {
-      cin >> a[i]; 
+      std::cin >> a[i]; 
     }
     for (int i = 0; i < R; i++) {
       for (int j = 0; j < C; j++) {
@@ -53,14 +51,14 @@ int main () {
       }
     }
     if (correct == false) {
-      cout << "IMPOSSIBLE" << endl; 
+      std::cout << "IMPOSSIBLE" << std::endl; 
     }
     else {
       for (int i = 0; i < (int) ans.size(); i++) {
-        cout << ans[i]; 
+        std::cout << ans[i]; 
       }
-      cout << 'N';
-      cout << endl; 
+      std::cout << 'N';
+      std::cout << std::endl; 
     }
   }
   return 0; 

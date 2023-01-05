@@ -1,12 +1,13 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream>
+#include <algorithm>
+#include <string> 
+#include <cstring>
 int numTest; 
 long long dp[15][120][120][3]; 
 long long A, B; 
 
-string convertToString(long long n) {
-  string ret = ""; 
+std::string convertToString(long long n) {
+  std::string ret = ""; 
   if (n == 0) {
     return "0"; 
   }
@@ -15,7 +16,7 @@ string convertToString(long long n) {
     n /= 10; 
     ret += (char) (r + '0'); 
   }
-  reverse(ret.begin(), ret.end()); 
+  std::reverse(ret.begin(), ret.end()); 
   return ret; 
 }
 
@@ -23,9 +24,9 @@ long long calc(long long n, int sumDigit) {
   if (n == 0) {
     return 0; 
   }
-  string N = convertToString(n); 
+  std::string N = convertToString(n); 
   int len = (int) N.size(); 
-  memset(dp, 0, sizeof(dp)); 
+  std::memset(dp, 0, sizeof(dp)); 
   for (int dig = 1; dig <= 9; dig++) {
     int state = 0; 
     if (dig == N[0] - '0') {
@@ -76,15 +77,15 @@ long long calc(long long n, int sumDigit) {
 }
 
 int main () {
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": "; 
-    cin >> A >> B; 
+    std::cout << "Case #" << testCase << ": "; 
+    std::cin >> A >> B; 
     long long ans = 0LL; 
     for (int sumDigit = 1; sumDigit <= 110; sumDigit++) {
       ans += calc(B, sumDigit) - calc(A - 1, sumDigit);   
     }
-    cout << ans << endl; 
+    std::cout << ans << std::endl; 
   }
   return 0; 
 }

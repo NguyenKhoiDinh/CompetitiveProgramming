@@ -1,4 +1,5 @@
-#include <bits/stdc++.h> 
+#include <iostream>
+#include <math.h>
 
 using namespace std; 
 int numTest; 
@@ -19,14 +20,12 @@ bool check(long long N) {
 }
 
 int main () {
-  freopen("input.txt", "r", stdin);
-  freopen("output.txt", "w", stdout);
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": "; 
-    cin >> N; 
+    std::cout << "Case #" << testCase << ": "; 
+    std::cin >> N; 
     int ans = 0; 
-    for (long long i = 1; i <= (long long) sqrt(N); i++) {
+    for (long long i = 1; i <= (long long) std::sqrt(N); i++) {
       if (N % i == 0) {
         long long a = i; 
         if (check(a) == true) {
@@ -38,7 +37,7 @@ int main () {
         }
       }
     }
-    cout << ans << endl; 
+    std::cout << ans << std::endl; 
   }
   return 0; 
 }

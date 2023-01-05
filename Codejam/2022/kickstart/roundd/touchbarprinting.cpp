@@ -9,8 +9,6 @@ int Left[2505][2505], Right[2505][2505];
 int dp[2505][2505]; 
 
 int main () {
-  //freopen("input.txt", "r", stdin);
-  //freopen("output.txt", "w", stdout);
   std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
     std::cout << "Case #" << testCase << ": ";

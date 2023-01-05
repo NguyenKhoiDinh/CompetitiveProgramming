@@ -1,17 +1,14 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream> 
+#include <string>
 int numTest; 
 
 int main () {
-  //freopen("input.txt", "r", stdin);
-  //freopen("output.txt", "w", stdout);
-  cin >> numTest; 
+  std::cin >> numTest; 
   for (int testCase = 1; testCase <= numTest; testCase++) {
-    cout << "Case #" << testCase << ": "; 
+    std::cout << "Case #" << testCase << ": "; 
     int n; 
-    string oldpassword; 
-    cin >> n >> oldpassword; 
+    std::string oldpassword; 
+    std::cin >> n >> oldpassword; 
     int uppercase = 0;
     int lowercase = 0; 
     int digit = 0; 
@@ -45,7 +42,7 @@ int main () {
     while ((int) oldpassword.size() < 7) {
       oldpassword += 'a'; 
     }
-    cout << oldpassword << endl; 
+    std::cout << oldpassword << std::endl; 
   }
   return 0; 
 }
