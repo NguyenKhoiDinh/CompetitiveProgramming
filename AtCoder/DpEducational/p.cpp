@@ -1,10 +1,9 @@
-#include <bits/stdc++.h>
-
-using namespace std;
+#include <iostream>
+#include <vector>
 const long long mod = 1000000007;
 long long dp[100005][2]; 
 int n; 
-vector <int> adj[100005];
+std::vector <int> adj[100005];
 
 void dfs(int u, int father) {
   dp[u][0] = 1LL; 
@@ -21,14 +20,14 @@ void dfs(int u, int father) {
 }
 
 int main () {
-  cin >> n;
+  std::cin >> n;
   for (int i = 1; i < n; i++) {
     int u, v;
-    cin >> u >> v;
+    std::cin >> u >> v;
     adj[u].push_back(v);
     adj[v].push_back(u); 
   }
   dfs(1, -1); 
-  cout << (dp[1][0] + dp[1][1]) % mod; 
+  std::cout << (dp[1][0] + dp[1][1]) % mod; 
   return 0;
 }

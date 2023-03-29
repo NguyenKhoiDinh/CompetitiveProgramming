@@ -1,21 +1,19 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
-
-long long dp[100005]; 
-long long a[100005]; 
-int n; 
+#include <iostream> 
+#include <math.h> 
+int n;
+int height[100005];
+int dp[100005]; 
 
 int main () {
-  cin >> n;
+  std::cin >> n; 
   for (int i = 1; i <= n; i++) {
-    cin >> a[i];
+    std::cin >> height[i]; 
   }
   dp[1] = 0; 
-  dp[2] = abs(a[2] - a[1]); 
+  dp[2] = std::abs(height[2] - height[1]); 
   for (int i = 3; i <= n; i++) {
-    dp[i] = min(dp[i - 1] + abs(a[i] - a[i - 1]), dp[i - 2] + abs(a[i] - a[i - 2])); 
+    dp[i] = std::min(dp[i - 1] + std::abs(height[i] - height[i - 1]), dp[i - 2] + std::abs(height[i] - height[i - 2])); 
   }
-  cout << dp[n];
-  return 0; 
+  std::cout << dp[n];
+  return 0;
 }

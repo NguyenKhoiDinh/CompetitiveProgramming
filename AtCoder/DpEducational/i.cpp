@@ -1,14 +1,13 @@
-#include <bits/stdc++.h>
-
-using namespace std;
+#include <iostream>
+#include <iomanip>
 double prob[3005]; 
 double dp[3005][3005]; 
 int n; 
 
 int main () {
-  cin >> n;
+  std::cin >> n;
   for (int i = 1; i <= n; i++) {
-    cin >> prob[i]; 
+    std::cin >> prob[i]; 
   }
   dp[0][0] = 1.0; 
   for (int i = 0; i < n; i++) {
@@ -27,6 +26,6 @@ int main () {
       ans += dp[n][head]; 
     }
   } 
-  cout << fixed << setprecision(12) << ans;
+  std::cout << std::fixed << std::setprecision(12) << ans;
   return 0;
 }

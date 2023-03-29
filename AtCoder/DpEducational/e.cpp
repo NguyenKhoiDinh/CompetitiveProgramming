@@ -1,6 +1,5 @@
-#include <bits/stdc++.h>
-
-using namespace std;         
+#include <iostream>
+#include <math.h>
 const int inf = 1000000007;
 struct object {
   int weight, value;
@@ -10,9 +9,9 @@ object a[105];
 int n, W, sumValue = 0;
 
 int main () {
-  cin >> n >> W;
+  std::cin >> n >> W;
   for (int i = 1; i <= n; i++) {
-    cin >> a[i].weight >> a[i].value;
+    std::cin >> a[i].weight >> a[i].value;
     sumValue += a[i].value;
   }
   for (int i = 0; i <= n; i++) {
@@ -24,9 +23,9 @@ int main () {
   for (int i = 0; i < n; i++) {
     for (int v = 0; v <= sumValue; v++) {
       if (dp[i][v] != inf) {
-        dp[i + 1][v] = min(dp[i + 1][v], dp[i][v]);
+        dp[i + 1][v] = std::min(dp[i + 1][v], dp[i][v]);
         if (dp[i][v] + a[i + 1].weight <= W) {
-          dp[i + 1][v + a[i + 1].value] = min(dp[i + 1][v + a[i + 1].value], dp[i][v] + a[i + 1].weight);
+          dp[i + 1][v + a[i + 1].value] = std::min(dp[i + 1][v + a[i + 1].value], dp[i][v] + a[i + 1].weight);
         }
       }
     }
@@ -37,6 +36,6 @@ int main () {
       res = v;
     }
   }
-  cout << res;
+  std::cout << res;
   return 0;
 }

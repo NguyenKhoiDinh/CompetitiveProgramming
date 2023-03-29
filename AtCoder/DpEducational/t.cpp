@@ -1,15 +1,14 @@
 #include <iostream>
-
-using namespace std;
+#include <string> 
 const int mod = 1000000007; 
 int dp[3005][3005];
 int sum[3005][3005]; 
-string s; 
+std::string s; 
 int n;
 
 int main () {
-  cin >> n;
-  cin >> s;                  
+  std::cin >> n;
+  std::cin >> s;                  
   dp[1][1] = 1;
   sum[1][1] = 1; 
   for (int i = 2; i <= n; i++) {
@@ -27,6 +26,6 @@ int main () {
   for (int j = 1; j <= n; j++) {
     (ans += dp[n][j]) %= mod; 
   } 
-  cout << ans;
+  std::cout << ans;
   return 0;
 }

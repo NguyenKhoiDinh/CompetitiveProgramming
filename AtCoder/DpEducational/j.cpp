@@ -1,16 +1,14 @@
 #include <iostream>
 #include <iomanip>
-
-using namespace std;
 double dp[305][305][305], prob[305][305][305]; 
 int n; 
 int c1 = 0, c2 = 0, c3 = 0; 
 
 int main () {
-  cin >> n; 
+  std::cin >> n; 
   for (int i = 1; i <= n; i++) {
     int x; 
-    cin >> x;
+    std::cin >> x;
     if (x == 1) {
       c1++;
     }
@@ -48,6 +46,6 @@ int main () {
       }
     }
   }
-  cout << fixed << setprecision(12) << dp[0][0][0]; 
+  std::cout << std::fixed << std::setprecision(12) << dp[0][0][0]; 
   return 0;
 }

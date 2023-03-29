@@ -1,23 +1,25 @@
-#include <bits/stdc++.h>
-
-using namespace std;   
+#include <iostream>
+#include <string>
+#include <math.h>
+#include <vector>
+#include <algorithm>
 int dp[3005][3005];
-string s1, s2;
+std::string s1, s2;
 int len1, len2;
 
 int main () {
-  cin >> s1 >> s2;
+  std::cin >> s1 >> s2;
   len1 = (int) s1.size();
   len2 = (int) s2.size();
   for (int i = 1; i <= len1; i++) {
     for (int j = 1; j <= len2; j++) {
-      dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+      dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
       if (s1[i - 1] == s2[j - 1]) {
-        dp[i][j] = max(dp[i][j], dp[i - 1][j - 1] + 1);
+        dp[i][j] = std::max(dp[i][j], dp[i - 1][j - 1] + 1);
       }
     }
   }
-  vector <char> res;
+  std::vector <char> res;
   int i = len1;
   int j = len2;
   while (i > 0 && j > 0) {
@@ -33,9 +35,9 @@ int main () {
       j--;
     }
   }
-  reverse(res.begin(), res.end());
+  std::reverse(res.begin(), res.end());
   for (int i = 0; i < (int) res.size(); i++) {
-    cout << res[i];
+    std::cout << res[i];
   }
   return 0;
 }

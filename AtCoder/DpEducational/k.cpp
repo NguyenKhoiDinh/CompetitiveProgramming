@@ -1,14 +1,12 @@
-#include <bits/stdc++.h> 
-
-using namespace std; 
+#include <iostream> 
 int n, k; 
 int dp[100005]; 
 int a[105]; 
 
 int main () {
-  cin >> n >> k; 
+  std::cin >> n >> k; 
   for (int i = 1; i <= n; i++) {
-    cin >> a[i]; 
+    std::cin >> a[i]; 
   }
   dp[0] = 0; 
   for (int i = 1; i <= k; i++) {
@@ -18,6 +16,6 @@ int main () {
       }
     }
   }
-  cout << (dp[k] == 1 ? "First" : "Second"); 
+  std::cout << (dp[k] == 1 ? "First" : "Second"); 
   return 0; 
 }

@@ -1,15 +1,14 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-const int MOD = 1000000007; 
+#include <iostream>
+#include <string>
+const int mod = 1000000007; 
 int dp[1005][1005]; 
-string a[1005]; 
+std::string a[1005]; 
 int H, W; 
 
 int main () {
-  cin >> H >> W; 
+  std::cin >> H >> W; 
   for (int i = 0; i < H; i++) {
-    cin >> a[i]; 
+    std::cin >> a[i]; 
   }
   dp[1][1] = 1; 
   for (int i = 1; i <= H; i++) {
@@ -18,13 +17,13 @@ int main () {
         continue; 
       }
       if (i < H && a[i][j - 1] == '.') {
-        (dp[i + 1][j] += dp[i][j]) %= MOD; 
+        (dp[i + 1][j] += dp[i][j]) %= mod; 
       }
       if (j < W && a[i - 1][j] == '.') {
-        (dp[i][j + 1] += dp[i][j]) %= MOD; 
+        (dp[i][j + 1] += dp[i][j]) %= mod; 
       }
     }
   }
-  cout << dp[H][W]; 
+  std::cout << dp[H][W]; 
   return 0;
 }

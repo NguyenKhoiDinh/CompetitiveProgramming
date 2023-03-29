@@ -1,10 +1,9 @@
-#include <bits/stdc++.h>
-
-using namespace std;
+#include <iostream>
+#include <vector> 
 const long long mod = 1000000007;
 struct matrix {
   int row, col; 
-  vector <vector <long long> > data; 
+  std::vector <std::vector <long long> > data; 
   matrix(int _row, int _col) {
     row = _row;
     col = _col; 
@@ -31,38 +30,38 @@ struct matrix {
 int n;
 long long k; 
 
-matrix POW(const matrix &M, long long N) {
-  if (N == 1) {
+matrix fastpow(const matrix &M, const long long &n) {
+  if (n == 1) {
     return M; 
   }
   else {              
-    matrix tmp = POW(M, N >> 1);
-    tmp = tmp * tmp; 
-    if (N % 2 == 1) {
-      tmp = tmp * M; 
+    matrix ret = fastpow(M, n >> 1);
+    ret = ret * ret; 
+    if (n % 2 == 1) {
+      ret = ret * M; 
     }
-    return tmp; 
+    return ret; 
   }
 }
 
 int main () {
-  cin >> n >> k; 
+  std::cin >> n >> k; 
   matrix base(n, 1); 
-  matrix M(n, n); 
+  matrix ret(n, n); 
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
-      cin >> M.data[i][j];
+      std::cin >> ret.data[i][j];
     }
   }
   for (int i = 0; i < n; i++) {
     base.data[i][0] = 1; 
   }
-  matrix ans = POW(M, k); 
+  matrix ans = fastpow(ret, k); 
   ans = ans * base; 
   long long res = 0LL;
   for (int i = 0; i < n; i++) {
     (res += ans.data[i][0]) %= mod; 
   }
-  cout << res; 
+  std::cout << res; 
   return 0;
 }
