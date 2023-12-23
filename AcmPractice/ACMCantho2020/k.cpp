@@ -4,11 +4,8 @@
 #include <fstream>
 #include <iomanip>
 #include <vector>
-
-using namespace std;
-const int MAX_N = 2005;
 const double inf = -1.000;
-const double PI = atan(-1);
+const double PI = std::atan(-1);
 
 struct coordinate {
   double x, y;
@@ -19,14 +16,14 @@ double sqr(double x) {
 }
 
 double distance(coordinate &A, coordinate &B) {
-  return sqrt(sqr(A.x - B.x) + sqr(A.y - B.y));
+  return std::sqrt(sqr(A.x - B.x) + sqr(A.y - B.y));
 }
 
-vector <coordinate> listPoints, curPoints;
+std::vector <coordinate> listPoints, curPoints;
 int n;
-double dp[10][MAX_N];
+double f[10][MAX_N];    
 
-void DivideAndConquer(int i, int uleft, int uright, int vleft, int vright) {
+void DivideAndConquer(int i, int optl, int optr, int vleft, int vright) {
   if (uleft > uright) {
     return;
   }
