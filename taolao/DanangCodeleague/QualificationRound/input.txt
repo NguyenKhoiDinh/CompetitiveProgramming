@@ -1,0 +1,10 @@
+9 2
+1 example.com 192.168.1.2
+2 example.com
+1 abc.net 192.168.4.5
+2 abc.net
+1 helloworld.edu 1.2.3.4
+1 abc.net 192.168.1.4
+2 helloworld.edu
+2 example.com
+2 abc.net

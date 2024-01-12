@@ -35,6 +35,10 @@ void DynamicProgramming() {
       }
     }
   }
+  freopen("output2.txt", "w", stdout); 
+  for (int i = 0; i <= 300; i++) {
+    cout << sg[i] << ","; 
+  }
 }
 
 class YetAnotherTokenGame {
@@ -54,3 +58,9 @@ class YetAnotherTokenGame {
     }
   }
 };
+
+YetAnotherTokenGame Y; 
+int main () {
+  cout << Y.getWinner({47});
+  return 0; 
+}

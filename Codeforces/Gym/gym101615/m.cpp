@@ -20,8 +20,8 @@ void dfs(int start, int u) {
 }
 
 int main () {
-  freopen("input.txt", "r", stdin);
-  freopen("output.txt", "w", stdout);
+  //freopen("input.txt", "r", stdin);
+  //freopen("output.txt", "w", stdout);
   cin >> n >> m;
   for (int i = 1; i <= m; i++) {
     int p, q;

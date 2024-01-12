@@ -12,7 +12,6 @@ int main () {
   int rowb = (b - 1) / m; 
   if (rowa == rowb) {
     std::cout << 1 << std::endl; 
-    std::cout << (a - 1) % m << ' ' << rowa << ' ' << (b - 1) % m + 1 << ' ' << rowa + 1;
     return 0; 
   }
   int firstRow = rowa; 
@@ -25,9 +24,6 @@ int main () {
   if (b == n || (b - 1) % m == m - 1) {
     save.push_back((element) {0, firstRow, m, rowb + 1}); 
     std::cout << (int) save.size() << std::endl;
-    for (int i = 0; i < (int) save.size(); i++) {
-      std::cout << save[i].x1 << ' ' << save[i].y1 << ' ' << save[i].x2 << ' ' << save[i].y2 << std::endl;
-    }
     return 0; 
   }
   if (firstRow < rowb) {
@@ -36,13 +32,8 @@ int main () {
   save.push_back((element) {0, rowb, (b - 1) % m + 1, rowb + 1}); 
   if ((int) save.size() == 3 && (a - 1) % m != 0 && numbBalls1 + numbBalls2 == m) {
     std::cout << 2 << std::endl;
-    std::cout << (a - 1) % m << ' ' << (a - 1) / m << ' ' << m << ' ' << (b - 1) / m << std::endl;
-    std::cout << 0 << ' ' << (a - 1) / m + 1 << ' ' << (a - 1) % m << ' ' << (b - 1) / m + 1; 
     return 0; 
   }
   std::cout << (int) save.size() << std::endl;
-  for (int i = 0; i < (int) save.size(); i++) {
-    std::cout << save[i].x1 << ' ' << save[i].y1 << ' ' << save[i].x2 << ' ' << save[i].y2 << std::endl;
-  }
   return 0; 
 }
