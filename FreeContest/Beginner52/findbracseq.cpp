@@ -1,10 +1,18 @@
 #include <iostream> 
 #include <string> 
 #include <math.h> 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3bdbcb6d04b5ce0df0397875a0b3de6b1e356065
 struct node {
   int freeOpen = 0, freeClose = 0, maxLength = 0; 
 };
 std::string s; 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3bdbcb6d04b5ce0df0397875a0b3de6b1e356065
 node solve(int L, int R) {
   if (L == R) {
     if (s[L] == '(') {

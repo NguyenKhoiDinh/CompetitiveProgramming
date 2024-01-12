@@ -163,6 +163,11 @@ long long solve2(const int &X, const std::vector <std::pair <int, int> > &a) {
 }
 
 int main () {
+<<<<<<< HEAD
+=======
+  //freopen("input.txt", "r", stdin);
+  //freopen("output.txt", "w", stdout);
+>>>>>>> 3bdbcb6d04b5ce0df0397875a0b3de6b1e356065
   std::cin >> n >> m;
   for (int i = 1; i <= n; i++) {
     std::cin >> b[i]; 

@@ -76,4 +76,8 @@ void solve(){
 int main () {
   solve(); 
   return 0; 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3bdbcb6d04b5ce0df0397875a0b3de6b1e356065
