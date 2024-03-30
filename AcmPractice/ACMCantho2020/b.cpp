@@ -1,8 +1,7 @@
 #include <iostream>
 
 using namespace std;
-const int MAX_N = 105;
-
+const int MAX_N = 105;                                   
 int numTest;
 int n, x, y;
 int a[MAX_N][MAX_N];
