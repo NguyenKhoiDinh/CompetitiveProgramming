@@ -1,1 +1,0 @@
-nên ở đây thay vì duyệt ước của X thì duyệt ước chẵn d của X. Thì tổng S = X / d 
