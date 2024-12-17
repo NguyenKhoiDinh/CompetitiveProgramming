@@ -1,0 +1,40 @@
+Một tên trộm đã đột nhập vào một ngôi nhà, ngôi nhà có N đồ vật. Đồ vật thứ i có trọng lượng wi và giá trị là ci. Tên trộm đem theo 
+
+một cái túi có tải trọng W. Nếu tổng trọng lượng của các đồ vật > W, cái túi sẽ rách và tên trộm sẽ không mang được đồ vật nào đi cả.
+
+Sau khi bỏ các đồ đạc vào túi, trong đầu tên trộm nghĩ rằng: "Ta có thể vác túi bằng 1 tay, vậy tay còn lại có thể lấy thêm 1 đồ vật nữa". Nghĩ là làm, tên trộm đã dùng tay còn lại để lấy thêm một đồ vật, nhưng vì sức khỏe, hắn chỉ có thể lấy thêm 1 đồ vật có tải trọng không vượt quá H
+
+Hãy cho biết tổng giá trị lớn nhất của các đồ vật mà tên trộm có thể mang đi. 
+
+Input: 
++ Dòng đầu tiên gồm 3 số nguyên dương N, W, H  (1 <= N <= 100, 1 <= W, H <= 10^9 )
++ N dòng sau, mỗi dòng gồm 2 số nguyên dương wi và ci  (1 <= wi <= 10^9, 1 <= ci <= 1000 )
+
+Output: 
++ 1 dòng duy nhất là tổng tiền thu được 
+
+
+Ví dụ 1: 
+
+Input 
+3 10 2 
+2 5 
+1 9 
+4 6 
+
+Output 
+20 
+
+Giải thích test số 1: cái túi đã đủ để bỏ hết tất cả đồ vật, nên tổng giá trị có thể mang đi là 20 
+
+
+Ví dụ 2: 
+3 2 4 
+2 5
+1 9
+4 6 
+
+Output 
+15 
+
+Giải thích test số 2: ta có thể bỏ đồ vật số 2 vào túi, còn đồ vật số 3 ta có thể mang đi bằng tay 

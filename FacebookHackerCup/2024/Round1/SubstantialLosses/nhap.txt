@@ -1,0 +1,24 @@
+2 2
+
+xuong 1 - len 1 - xuong 1 - len 1 - xuong 1 - len 1 - xuong 1
+
+
+
+
+2 -> 1
+
+
+xuong 1
+
+
+
+E[1] = prob[1] * N[1]
+     = (prob[2] * 1/2
+
+     
+
+
+
+x 
+lxx
+llxlx 

@@ -1,0 +1,139 @@
+/*************************************
+*    author: marvinthang             *
+*    created: 03.11.2024 00:00:57    *
+*************************************/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define             fi  first
+#define             se  second
+#define           left  ___left___
+#define          right  ___right___
+#define   scan_op(...)  istream & operator >> (istream &in, __VA_ARGS__ &u)
+#define  print_op(...)  ostream & operator << (ostream &out, const __VA_ARGS__ &u)
+#define     file(name)  if (fopen(name".inp", "r")) { freopen(name".inp", "r", stdin); freopen(name".out", "w", stdout); }
+#ifdef LOCAL
+    #include "debug.h"
+#else
+    #define DB(...)
+    #define db(...) ""
+    #define debug(...)
+#endif
+
+namespace std {
+template <class U, class V> scan_op(pair <U, V>) { return in >> u.first >> u.second; }
+template <class T> scan_op(vector <T>) { for (size_t i = 0; i < u.size(); ++i) in >> u[i]; return in; }
+template <class U, class V> print_op(pair <U, V>) { return out << '(' << u.first << ", " << u.second << ')'; }
+template <size_t i, class T> ostream &print_tuple_utils(ostream &out, const T &tup) { if constexpr(i == tuple_size<T>::value) return out << ")"; else return print_tuple_utils<i + 1, T>(out << (i ? ", " : "(") << get<i>(tup), tup); }
+template <class...U> print_op(tuple <U...>) { return print_tuple_utils<0, tuple <U...>>(out, u); }
+template <class Con, class = decltype(begin(declval<Con>()))>typename enable_if <!is_same<Con, string>::value, ostream &>::type operator << (ostream &out, const Con &con) { out << '{'; for (__typeof(con.begin()) it = con.begin(); it != con.end(); ++it) out << (it == con.begin() ? "" : ", ") << *it; return out << '}'; }
+template <class T> print_op(stack <T>) { vector <T> v; stack <T> st = u; while (!st.empty()) v.push_back(st.top()), st.pop(); reverse(v.begin(), v.end()); return out << v; }
+template <class T> print_op(queue <T>) { queue <T> q = u; out << '{'; while (!q.empty()) { out << q.front(); q.pop(); if (!q.empty()) out << ", "; } out << '}'; return out; }
+template <class T, class X, class Y> print_op(priority_queue <T, X, Y>) { priority_queue <T, X, Y> pq = u; out << '{'; while (!pq.empty()) { out << pq.top(); pq.pop(); if (!pq.empty()) out << ", "; } out << '}'; return out; }
+template <class Fun> class y_combinator_result { Fun fun_; public: template <class T> explicit y_combinator_result(T &&fun): fun_(forward<T>(fun)) {} template <class...Args> decltype(auto)operator()(Args &&...args) { return fun_(ref(*this), forward<Args>(args)...); } };
+template <class Fun> decltype(auto)y_combinator(Fun &&fun) { return y_combinator_result<decay_t<Fun>>(forward<Fun>(fun)); }
+template <typename T, int D> struct Vec: public vector <Vec<T, D - 1>> { static_assert(D >= 1, "Vector dimension must be greater than zero!"); template <typename ...Args> Vec(int n = 0, Args ...args): vector <Vec<T, D - 1>>(n, Vec<T, D - 1>(args...)) {} };
+template <typename T> struct Vec<T, 1>: public vector<T>{ Vec(int n = 0, const T &val = T()): vector<T>(n, val) {} };
+template <class A, class B> bool minimize(A &a, B b)  { return a > b ? a = b, true : false; }
+template <class A, class B> bool maximize(A &a, B b)  { return a < b ? a = b, true : false; }
+#if __cplusplus < 202002L
+    template <class T> int ssize(const T &a) { return a.size(); }
+#endif
+}
+
+void process(void) {
+    int n, k; cin >> n >> k;
+    vector <string> a(n); cin >> a;
+    vector <pair <int, int>> pos, one;
+    int max_x = -1, min_x = n, max_y = -1, min_y = n;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (a[i][j] == '1') {
+                one.emplace_back(i, j);
+            } else if (a[i][j] == '?') {
+                pos.emplace_back(i, j);
+            } else continue;
+            max_x = max(max_x, i);
+            min_x = min(min_x, i);
+            max_y = max(max_y, j);
+            min_y = min(min_y, j);
+        }
+    }
+    if (k >= 4 || k >= ssize(pos) || k == 0) {
+        cout << (max_x - min_x + 1) * (max_y - min_y + 1) << '\n';
+        return;
+    }
+    int pmax_x = -1, pmin_x = n, pmax_y = -1, pmin_y = n;
+    for (auto [i, j]: one) {
+        pmax_x = max(pmax_x, i);
+        pmin_x = min(pmin_x, i);
+        pmax_y = max(pmax_y, j);
+        pmin_y = min(pmin_y, j);
+    }
+    int res = 0;
+    if (!one.empty()) res = (pmax_x - pmin_x + 1) * (pmax_y - pmin_y + 1);
+    for (auto [x, y]: pos) {
+        res = max(res, (max(x, pmax_x) - min(x, pmin_x) + 1) * (max(y, pmax_y) - min(y, pmin_y) + 1));
+    }
+    if (k == 1) {
+        cout << res << '\n';
+        return;
+    }
+    vector <int> min_vy(n, n), max_vy(n, -1);
+    for (auto [x, y]: pos) {
+        min_vy[x] = min(min_vy[x], y);
+        max_vy[x] = max(max_vy[x], y);
+    }
+    for (auto [x, y]: one) {
+        min_vy[x] = min(min_vy[x], y);
+        max_vy[x] = max(max_vy[x], y);
+    }
+    for (int i = 0; i < n; ++i) if (max_vy[i] != -1) {
+        for (int j = i; j < n; ++j) if (max_vy[j] != -1) {
+            maximize(res, (j - i + 1) * (max_vy[j] - min_vy[i] + 1));
+            maximize(res, (j - i + 1) * (max_vy[i] - min_vy[j] + 1));
+        }
+    }
+    auto calc = [&] (int x, int y, int u, int v, int k) {
+        for (int mask = 0; mask < 1 << 4; ++mask) if (__builtin_popcount(mask) == k) {
+            int tx = x, ty = y, tu = u, tv = v;
+            if (mask & 1) minimize(tx, min_x);
+            if (mask >> 1 & 1) minimize(ty, min_y);
+            if (mask >> 2 & 1) maximize(tu, max_x);
+            if (mask >> 3 & 1) maximize(tv, max_y);
+            maximize(res, (tu - tx + 1) * (tv - ty + 1));
+        }
+    };
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (a[i][j] != '0') {
+                calc(min(i, pmin_x), min(j, pmin_y), max(i, pmax_x), max(j, pmax_y), 1);
+            }
+        }
+    }
+    if (k == 2) {
+        cout << res << '\n';
+        return;
+    }
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (a[i][j] != '0') {
+                calc(min(i, pmin_x), min(j, pmin_y), max(i, pmax_x), max(j, pmax_y), 2);
+            }
+        }
+    }
+    cout << res << '\n';
+}
+
+int main(void) {
+    ios_base::sync_with_stdio(false); cin.tie(nullptr);
+    file("test");
+    int t; cin >> t;
+    for (int i = 1; i <= t; ++i) {
+        cout << "Case #" << i << ": ";
+        process();
+    }
+    return (0^0);
+}

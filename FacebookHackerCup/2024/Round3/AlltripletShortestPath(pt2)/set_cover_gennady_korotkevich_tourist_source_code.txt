@@ -1,0 +1,135 @@
+/**
+ *    author:  tourist
+ *    created: 02.11.2024 10:05:46
+**/
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#ifdef LOCAL
+#include "algo/debug.h"
+#else
+#define debug(...) 42
+#endif
+
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  int tt;
+  cin >> tt;
+  for (int qq = 1; qq <= tt; qq++) {
+    cout << "Case #" << qq << ": ";
+    int n, k;
+    cin >> n >> k;
+    vector<string> s(n);
+    for (int i = 0; i < n; i++) {
+      cin >> s[i];
+    }
+    vector<pair<int, int>> cand;
+    int min_i = n + 1;
+    int min_j = n + 1;
+    int max_i = -1;
+    int max_j = -1;
+    int ans = 0;
+    auto Update = [&](int i, int j) {
+      min_i = min(min_i, i);
+      min_j = min(min_j, j);
+      max_i = max(max_i, i);
+      max_j = max(max_j, j);
+    };
+    auto Serialize = [&]() {
+      return array<int, 4>{min_i, min_j, max_i, max_j};
+    };
+    auto Deserialize = [&](array<int, 4> arr) {
+      min_i = arr[0];
+      min_j = arr[1];
+      max_i = arr[2];
+      max_j = arr[3];
+    };
+    auto Check = [&]() {
+      assert(min_i <= max_i && min_j <= max_j);
+      assert(0 <= min_i && max_i < n && 0 <= min_j && max_j < n);
+      ans = max(ans, (max_i - min_i + 1) * (max_j - min_j + 1));
+    };
+    for (int i = 0; i < n; i++) {
+      int first = -1, last = -1;
+      for (int j = 0; j < n; j++) {
+        if (s[i][j] == '?') {
+          if (first == -1) {
+            first = j;
+          }
+          last = j;
+        }
+        if (s[i][j] == '1') {
+          Update(i, j);
+        }
+      }
+      if (first != -1) {
+        cand.emplace_back(i, first);
+        cand.emplace_back(i, last);
+      }
+    }
+    if (k >= 4) {
+      for (auto& [i, j] : cand) {
+        Update(i, j);
+      }
+      Check();
+    }
+    if (k == 0) {
+      Check();
+    }
+    if (k == 1) {
+      auto save = Serialize();
+      for (auto& [i, j] : cand) {
+        Update(i, j);
+        Check();
+        Deserialize(save);
+      }
+    }
+    if (k == 2) {
+      auto save = Serialize();
+      for (auto& [i, j] : cand) {
+        for (auto& [ii, jj] : cand) {
+          Update(i, j);
+          Update(ii, jj);
+          Check();
+          Deserialize(save);
+        }
+      }
+    }
+    if (k == 3) {
+      pair<int, int> fst = {-1, -1};
+      pair<int, int> lst = {-1, -1};
+      for (int j = 0; j < n; j++) {
+        for (int i = 0; i < n; i++) {
+          if (s[i][j] == '?') {
+            if (fst.first == -1) {
+              fst = {i, j};
+            }
+            lst = {i, j};
+          }
+        }
+      }
+      vector<pair<int, int>> border;
+      border.push_back(cand[0]);
+      border.push_back(cand.back());
+      border.push_back(fst);
+      border.push_back(lst);
+      auto save = Serialize();
+      for (auto& [ib, jb] : border) {
+        for (auto& [i, j] : cand) {
+          for (auto& [ii, jj] : cand) {
+            Update(ib, jb);
+            Update(i, j);
+            Update(ii, jj);
+            Check();
+            Deserialize(save);
+          }
+        }
+      }
+    }
+    cout << ans << '\n';
+    debug(qq, tt, clock());
+  }
+  return 0;
+}

@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+#ifdef LOCAL
+#include "Debug.h"
+#else
+#define debug(...) 42
+#endif
+using namespace std;
+const int N = 3e5 + 5;
+
+vector<int> a[N];
+int isLeaf[N], cntSmall[N], hasNonLeaf[N], p[N];
+
+void dfs(int x)
+{
+  isLeaf[x] = 1;
+  cntSmall[x] = hasNonLeaf[x] = 0;
+  for (int y : a[x])
+    if (y != p[x])
+    {
+      isLeaf[x] = 0;
+      p[y] = x;
+      dfs(y);
+      if (y < x)
+      {
+        cntSmall[x]++;
+        if (!isLeaf[y])
+          hasNonLeaf[x] = 1;
+      }
+    }
+}
+
+int main()
+{
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  int test;
+  cin >> test;
+  for (int iTest = 1; iTest <= test; iTest++)
+  {
+    cerr << "Running test " << iTest << endl;
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++)
+      a[i].clear();
+    for (int i = 0; i < n - 1; i++)
+    {
+      int x, y;
+      cin >> x >> y;
+      a[--x].push_back(--y);
+      a[y].push_back(x);
+    }
+    int root = 0;
+    if (n > 2)
+      while (size(a[root]) == 1)
+        root++;
+
+    p[root] = -1;
+    dfs(root);
+    int ans = 1;
+    for (int i = 0; i < n; i++)
+    {
+      if (p[i] >= 0 && p[i] < i)
+      {
+        cntSmall[i]++;
+        hasNonLeaf[i] = 1;
+      }
+      if (cntSmall[i] >= 2 && hasNonLeaf[i])
+        ans = 0;
+    }
+    cout << "Case #" << iTest << ": " << (ans ? "Lucky" : "Wrong") << endl;
+  }
+}

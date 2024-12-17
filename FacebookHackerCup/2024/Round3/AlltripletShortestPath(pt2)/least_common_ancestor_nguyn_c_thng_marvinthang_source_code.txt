@@ -1,0 +1,280 @@
+/*************************************
+*    author: marvinthang             *
+*    created: 03.11.2024 00:00:57    *
+*************************************/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define             fi  first
+#define             se  second
+#define           left  ___left___
+#define          right  ___right___
+#define   scan_op(...)  istream & operator >> (istream &in, __VA_ARGS__ &u)
+#define  print_op(...)  ostream & operator << (ostream &out, const __VA_ARGS__ &u)
+#define     file(name)  if (fopen(name".inp", "r")) { freopen(name".inp", "r", stdin); freopen(name".out", "w", stdout); }
+#ifdef LOCAL
+    #include "debug.h"
+#else
+    #define DB(...)
+    #define db(...) ""
+    #define debug(...)
+#endif
+
+namespace std {
+template <class U, class V> scan_op(pair <U, V>) { return in >> u.first >> u.second; }
+template <class T> scan_op(vector <T>) { for (size_t i = 0; i < u.size(); ++i) in >> u[i]; return in; }
+template <class U, class V> print_op(pair <U, V>) { return out << '(' << u.first << ", " << u.second << ')'; }
+template <size_t i, class T> ostream &print_tuple_utils(ostream &out, const T &tup) { if constexpr(i == tuple_size<T>::value) return out << ")"; else return print_tuple_utils<i + 1, T>(out << (i ? ", " : "(") << get<i>(tup), tup); }
+template <class...U> print_op(tuple <U...>) { return print_tuple_utils<0, tuple <U...>>(out, u); }
+template <class Con, class = decltype(begin(declval<Con>()))>typename enable_if <!is_same<Con, string>::value, ostream &>::type operator << (ostream &out, const Con &con) { out << '{'; for (__typeof(con.begin()) it = con.begin(); it != con.end(); ++it) out << (it == con.begin() ? "" : ", ") << *it; return out << '}'; }
+template <class T> print_op(stack <T>) { vector <T> v; stack <T> st = u; while (!st.empty()) v.push_back(st.top()), st.pop(); reverse(v.begin(), v.end()); return out << v; }
+template <class T> print_op(queue <T>) { queue <T> q = u; out << '{'; while (!q.empty()) { out << q.front(); q.pop(); if (!q.empty()) out << ", "; } out << '}'; return out; }
+template <class T, class X, class Y> print_op(priority_queue <T, X, Y>) { priority_queue <T, X, Y> pq = u; out << '{'; while (!pq.empty()) { out << pq.top(); pq.pop(); if (!pq.empty()) out << ", "; } out << '}'; return out; }
+template <class Fun> class y_combinator_result { Fun fun_; public: template <class T> explicit y_combinator_result(T &&fun): fun_(forward<T>(fun)) {} template <class...Args> decltype(auto)operator()(Args &&...args) { return fun_(ref(*this), forward<Args>(args)...); } };
+template <class Fun> decltype(auto)y_combinator(Fun &&fun) { return y_combinator_result<decay_t<Fun>>(forward<Fun>(fun)); }
+template <typename T, int D> struct Vec: public vector <Vec<T, D - 1>> { static_assert(D >= 1, "Vector dimension must be greater than zero!"); template <typename ...Args> Vec(int n = 0, Args ...args): vector <Vec<T, D - 1>>(n, Vec<T, D - 1>(args...)) {} };
+template <typename T> struct Vec<T, 1>: public vector<T>{ Vec(int n = 0, const T &val = T()): vector<T>(n, val) {} };
+template <class A, class B> bool minimize(A &a, B b)  { return a > b ? a = b, true : false; }
+template <class A, class B> bool maximize(A &a, B b)  { return a < b ? a = b, true : false; }
+#if __cplusplus < 202002L
+    template <class T> int ssize(const T &a) { return a.size(); }
+#endif
+}
+
+namespace MODINT {
+struct barrett {
+    unsigned int _m;
+    unsigned long long im;
+    explicit barrett(unsigned int m) : _m(m), im((unsigned long long)(-1) / m + 1) {}
+    unsigned int umod() const { return _m; };
+    unsigned int mul(unsigned int a, unsigned int b) const {
+        unsigned long long z = a; z *= b;
+        unsigned long long x = (unsigned long long)(((unsigned __int128) z * im) >> 64);
+        unsigned long long y = x * _m;
+        return (unsigned int)(z - y + (z < y ? _m : 0));
+    }
+};
+template <class T> T invGeneral(T a, T b) {
+    a %= b;
+    if (!a) return b == 1 ? 0 : -1;
+    T x = invGeneral(b, a);
+    return x == -1 ? -1 : ((1 - 1LL * b * x) / a + b) % b;
+}
+template <int m, enable_if_t<1 <= m>* = nullptr>
+struct static_modint {
+using mint = static_modint;
+public:
+    static constexpr int mod() { return m; }
+    static mint raw(int v) {
+        mint x; x.v = v;
+        return x;
+    }
+    static_modint(): v(0) {}
+    template <class T> static_modint(T x) {
+        int y;
+        if (x < 0) {
+            if (x < -mod()) y = x % mod();
+            else y = x;
+            if (y < 0) y += mod();
+        } else {
+            if (x < mod()) y = x;
+            else y = x % mod();
+        }
+        v = y;
+    }
+    unsigned int val() const { return v; }
+    unsigned int operator () () const { return v; }
+    mint & operator ++ () { if (++v == umod()) v = 0; return *this; }
+    mint & operator -- () { if (!v) v = umod(); --v; return *this; }
+    mint operator ++ (int) { mint old = *this; ++*this; return old; }
+    mint operator -- (int) { mint old = *this; --*this; return old; }
+    mint operator + () { return *this; }
+    mint operator - () { return raw(!v ? 0 : umod() - v); }
+    mint & operator += (const mint &rhs) { v += rhs.v; if (v >= umod()) v -= umod(); return *this; }
+    mint & operator -= (const mint &rhs) { v -= rhs.v; if (v >= umod()) v += umod(); return *this; }
+    mint & operator *= (const mint &rhs) {
+        unsigned long long z = v; z *= rhs.v; v = z % umod();
+        return *this;
+    }
+    mint & operator /= (const mint &rhs) { return *this *= rhs.inv(); }
+    friend mint operator + (const mint &lhs, const mint &rhs) { return mint(lhs) += rhs; }
+    friend mint operator - (const mint &lhs, const mint &rhs) { return mint(lhs) -= rhs; }
+    friend mint operator * (const mint &lhs, const mint &rhs) { return mint(lhs) *= rhs; }
+    friend mint operator / (const mint &lhs, const mint &rhs) { return mint(lhs) /= rhs; }
+    mint pow(long long n) const {
+        assert(0 <= n);
+        mint res = 1, a = *this;
+        for (; n; n >>= 1, a *= a) if (n & 1) res *= a;
+        return res;
+    }
+    mint inv() const {
+        int i = invGeneral((int) v, mod());
+        assert(~i);
+        return i;
+    }
+    friend bool operator == (const mint& lhs, const mint& rhs) { return lhs.v == rhs.v; }
+    friend bool operator != (const mint& lhs, const mint& rhs) { return lhs.v != rhs.v; }
+    friend ostream & operator << (ostream &out, const mint &x) { return out << x.v; }
+    friend istream & operator >> (istream &in, mint &x) { long long a; in >> a; x = a; return in; }
+    explicit operator bool() const { return v; }
+    explicit operator int() const { return v; }
+private:
+    unsigned int v;
+    static constexpr unsigned int umod() { return m; }
+};
+template <int id> struct dynamic_modint {
+using mint = dynamic_modint;
+public:
+    static int mod() { return (int) bt.umod(); }
+    static void set_mod(int m) {
+        assert(1 <= m);
+        bt = barrett(m);
+    }
+    static mint raw(int v) {
+        mint x; x.v = v;
+        return x;
+    }
+    dynamic_modint(): v(0) {}
+    template <class T> dynamic_modint(T x) {
+        int y;
+        if (x < 0) {
+            if (x < -mod()) y = x % mod();
+            else y = x;
+            if (y < 0) y += mod();
+        } else {
+            if (x < mod()) y = x;
+            else y = x % mod();
+        }
+        v = y;
+    }
+    unsigned int val() const { return v; }
+    unsigned int operator () () const { return v; }
+    mint & operator ++ () { if (++v == umod()) v = 0; return *this; }
+    mint & operator -- () { if (!v) v = umod(); --v; return *this; }
+    mint operator ++ (int) { mint old = *this; ++*this; return old; }
+    mint operator -- (int) { mint old = *this; --*this; return old; }
+    mint operator + () { return *this; }
+    mint operator - () { return raw(!v ? 0 : umod() - v); }
+    mint & operator += (const mint &rhs) { v += rhs.v; if (v >= umod()) v -= umod(); return *this; }
+    mint & operator -= (const mint &rhs) { v -= rhs.v; if (v >= umod()) v += umod(); return *this; }
+    mint & operator *= (const mint &rhs) {
+        v = bt.mul(v, rhs.v);
+        return *this;
+    }
+    mint & operator /= (const mint &rhs) { return *this *= rhs.inv(); }
+    friend mint operator + (const mint &lhs, const mint &rhs) { return mint(lhs) += rhs; }
+    friend mint operator - (const mint &lhs, const mint &rhs) { return mint(lhs) -= rhs; }
+    friend mint operator * (const mint &lhs, const mint &rhs) { return mint(lhs) *= rhs; }
+    friend mint operator / (const mint &lhs, const mint &rhs) { return mint(lhs) /= rhs; }
+    mint pow(long long n) const {
+        assert(0 <= n);
+        mint res = 1, a = *this;
+        for (; n; n >>= 1, a *= a) if (n & 1) res *= a;
+        return res;
+    }
+    mint inv() const {
+        int i = invGeneral((int) v, mod());
+        assert(~i);
+        return i;
+    }
+    friend bool operator == (const mint& lhs, const mint& rhs) { return lhs.v == rhs.v; }
+    friend bool operator != (const mint& lhs, const mint& rhs) { return lhs.v != rhs.v; }
+    friend ostream & operator << (ostream &out, const mint &x) { return out << x.v; }
+    friend istream & operator >> (istream &in, mint &x) { long long a; in >> a; x = a; return in; }
+    explicit operator bool() const { return v; }
+    explicit operator int() const { return v; }
+private:
+    unsigned int v;
+    static barrett bt;
+    static unsigned int umod() { return bt.umod(); }
+};
+template <int id> barrett dynamic_modint<id>::bt(998244353);
+using modint998244353 = static_modint<998244353>;
+using modint1000000007 = static_modint<1000000007>;
+using modint = dynamic_modint <-1>;
+using Modular = modint998244353;
+} using namespace MODINT;
+
+void process(void) {
+    int n; cin >> n;
+    vector <string> sv;
+    Vec <int, 2> adj(n);
+    vector <int> val(n);
+    vector <string> s(n);
+    for (int i = 0; i < n; ++i) {
+        int p; cin >> p >> s[i];
+        if (i) adj[--p].push_back(i);
+    }
+    sv = s;
+    sort(sv.begin(), sv.end());
+    sv.erase(unique(sv.begin(), sv.end()), sv.end());
+    for (int i = 0; i < n; ++i) {
+        val[i] = lower_bound(sv.begin(), sv.end(), s[i]) - sv.begin();
+    }
+    vector <int> a(n, -1), d(n, -1), cnt(n), sz(n, 1);
+    vector <int> tin(n), tout(n), tour(n), heavy(n, -1);
+    int timer = 0;
+    y_combinator([&](auto dfs, int u) -> void {
+        tin[u] = timer;
+        tour[timer++] = u;
+        for (int v: adj[u]) {
+            dfs(v);
+            sz[u] += sz[v];
+            if (heavy[u] == -1 || sz[v] > sz[heavy[u]]) heavy[u] = v;
+        }
+        tout[u] = timer;
+    })(0);
+    priority_queue <pair <int, int>, vector <pair <int, int>>, greater <pair <int, int>>> pq;
+    auto add = [&] (int v) {
+        ++cnt[v];
+        pq.emplace(cnt[v], v);
+    };
+    auto del = [&] (int v) {
+        --cnt[v];
+        if (cnt[v]) pq.emplace(cnt[v], v);
+    };
+    auto get = [&] {
+        while (!pq.empty() && cnt[pq.top().se] != pq.top().fi) pq.pop();
+        return pq.empty() ? -1 : pq.top().se;
+    };
+    y_combinator([&](auto dfs, int u) -> void {
+        if (u) a[u] = get();
+        add(val[u]);
+        for (int v: adj[u]) {
+            dfs(v);
+        }
+        del(val[u]);
+    })(0);
+    y_combinator([&](auto dfs, int u) -> void {
+        for (int v: adj[u]) if (v != heavy[u]) {
+            dfs(v);
+            for (int i = tin[v]; i < tout[v]; ++i) del(val[tour[i]]);
+        }
+        if (heavy[u] != -1) {
+            dfs(heavy[u]);
+            for (int i = tin[u] + 1; i < tin[heavy[u]]; ++i) add(val[tour[i]]);
+            for (int i = tout[heavy[u]]; i < tout[u]; ++i) add(val[tour[i]]);
+            d[u] = get();
+        }
+        add(val[u]);
+    })(0);
+    Modular hash = 0;
+    for (int i = 0; i < n; ++i) {
+        hash = hash * (ssize(sv) + 1) + a[i] + 1;
+        hash = hash * (ssize(sv) + 1) + d[i] + 1;
+    }
+    cout << hash << '\n';
+}
+
+int main(void) {
+    ios_base::sync_with_stdio(false); cin.tie(nullptr);
+    file("test");
+    int t; cin >> t;
+    for (int i = 1; i <= t; ++i) {
+        cout << "Case #" << i << ": ";
+        process();
+    }
+    return (0^0);
+}

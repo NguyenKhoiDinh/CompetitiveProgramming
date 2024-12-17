@@ -1,0 +1,263 @@
+#include <bits/stdc++.h>
+
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+
+using namespace std;
+
+#ifdef LOCAL
+#include "debug.h"
+#else
+#define debug(...) 42
+#endif
+
+using ll = long long;
+using ld = long double;
+using vi = vector<int>;
+
+template<class T> bool uin(T &a, T b) {
+    return a > b ? (a = b, true) : false;
+}
+template<class T> bool uax(T &a, T b) {
+    return a < b ? (a = b, true) : false;
+}
+
+mt19937 rng(chrono::system_clock::now().time_since_epoch().count());
+
+const int maxN = 1e5 + 10;
+
+int n;
+
+void init() {
+}
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<string> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    int up = 1e9, down = -1e9, left = 1e9, right = -1e9;
+    vector<pair<int, int>> up_left, up_right, down_left, down_right;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (a[i][j] == '?') {
+                if (uin(left, j)) {
+                    up_left.emplace_back(i, j);
+                }
+            }
+        }
+        for (int j = n - 1; j >= 0; j--) {
+            if (a[i][j] == '?') {
+                if (uax(right, j)) {
+                    up_right.emplace_back(i, j);
+                }
+            }
+        }
+    }
+    left = 1e9;
+    right = -1e9;
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = 0; j < n; j++) {
+            if (a[i][j] == '?') {
+                if (uin(left, j)) {
+                    down_left.emplace_back(i, j);
+                }
+            }
+        }
+        for (int j = n - 1; j >= 0; j--) {
+            if (a[i][j] == '?') {
+                if (uax(right, j)) {
+                    down_right.emplace_back(i, j);
+                }
+            }
+        }
+    }
+    up = 1e9, down = -1e9, left = 1e9, right = -1e9;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (a[i][j] == '1') {
+                uin(up, i);
+                uax(down, i);
+                uin(left, j);
+                uax(right, j);
+            }
+        }
+    }
+    uin(k, 4);
+    if (k == 0) {
+        cout << (down - up + 1) * (right - left + 1) << "\n";
+        return;
+    }
+    if (k == 1) {
+        int area = 0;
+        if (down > 0) {
+            area = (down - up + 1) * (right - left + 1);
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (a[i][j] == '?') {
+                    int ddown = down;
+                    int dup = up;
+                    int dleft = left;
+                    int dright = right;
+                    uin(dup, i);
+                    uax(ddown, i);
+                    uin(dleft, j);
+                    uax(dright, j);
+                    uax(area, (ddown - dup + 1) * (dright - dleft + 1));
+                }
+            }
+        }
+        cout << area << "\n";
+        return;
+    }
+    if (k == 2) {
+        int area = 0;
+        if (down > 0) {
+            area = (down - up + 1) * (right - left + 1);
+        }
+        vector<pair<int, int>> com;
+        com.insert(com.end(), all(up_left));
+        com.insert(com.end(), all(up_right));
+        com.insert(com.end(), all(down_left));
+        com.insert(com.end(), all(down_right));
+        sort(all(com));
+        com.resize(unique(all(com)) - com.begin());
+        for (int i = 0; i < com.size(); i++) {
+            for (int j = 0; j < com.size(); j++) {
+                int ddown = down;
+                int dup = up;
+                int dleft = left;
+                int dright = right;
+                uin(dup, com[i].fi);
+                uin(dup, com[j].fi);
+                uax(ddown, com[i].fi);
+                uax(ddown, com[j].fi);
+                uin(dleft, com[i].se);
+                uin(dleft, com[j].se);
+                uax(dright, com[i].se);
+                uax(dright, com[j].se);
+                uax(area, (ddown - dup + 1) * (dright - dleft + 1));
+            }
+        }
+        cout << area << "\n";
+        return;
+    }
+    if (k == 3) {
+        int area = 0;
+        if (down > 0) {
+            area = (down - up + 1) * (right - left + 1);
+        }
+        vector<pair<int, int>> com;
+        com.insert(com.end(), all(up_left));
+        com.insert(com.end(), all(up_right));
+        com.insert(com.end(), all(down_left));
+        com.insert(com.end(), all(down_right));
+        sort(all(com));
+        com.resize(unique(all(com)) - com.begin());
+        vector<pair<int, int>> com2;
+        com2.push_back(up_left.front());
+        com2.push_back(up_left.back());
+        com2.push_back(up_right.front());
+        com2.push_back(up_right.back());
+        com2.push_back(down_left.front());
+        com2.push_back(down_left.back());
+        com2.push_back(down_right.front());
+        com2.push_back(down_right.back());
+        sort(all(com2));
+        com2.resize(unique(all(com2)) - com2.begin());
+        for (int i = 0; i < com.size(); i++) {
+            for (int j = 0; j < com2.size(); j++) {
+                for (int k = 0; k < com2.size(); k++) {
+                    int ddown = down;
+                    int dup = up;
+                    int dleft = left;
+                    int dright = right;
+                    uin(dup, com[i].fi);
+                    uin(dup, com2[j].fi);
+                    uin(dup, com2[k].fi);
+                    uax(ddown, com[i].fi);
+                    uax(ddown, com2[j].fi);
+                    uax(ddown, com2[k].fi);
+                    uin(dleft, com[i].se);
+                    uin(dleft, com2[j].se);
+                    uin(dleft, com2[k].se);
+                    uax(dright, com[i].se);
+                    uax(dright, com2[j].se);
+                    uax(dright, com2[k].se);
+                    uax(area, (ddown - dup + 1) * (dright - dleft + 1));
+                }
+            }
+        }
+        cout << area << "\n";
+        return;
+    }
+    if (k == 4) {
+        int area = 0;
+        if (down > 0) {
+            area = (down - up + 1) * (right - left + 1);
+        }
+        vector<pair<int, int>> com2;
+        com2.push_back(up_left.front());
+        com2.push_back(up_left.back());
+        com2.push_back(up_right.front());
+        com2.push_back(up_right.back());
+        com2.push_back(down_left.front());
+        com2.push_back(down_left.back());
+        com2.push_back(down_right.front());
+        com2.push_back(down_right.back());
+        sort(all(com2));
+        com2.resize(unique(all(com2)) - com2.begin());
+        for (int i = 0; i < com2.size(); i++) {
+            for (int j = 0; j < com2.size(); j++) {
+                for (int k = 0; k < com2.size(); k++) {
+                    for (int l = 0; l < com2.size(); l++) {
+                        int ddown = down;
+                        int dup = up;
+                        int dleft = left;
+                        int dright = right;
+                        uin(dup, com2[i].fi);
+                        uin(dup, com2[j].fi);
+                        uin(dup, com2[k].fi);
+                        uin(dup, com2[l].fi);
+                        uax(ddown, com2[i].fi);
+                        uax(ddown, com2[j].fi);
+                        uax(ddown, com2[k].fi);
+                        uax(ddown, com2[l].fi);
+                        uin(dleft, com2[i].se);
+                        uin(dleft, com2[j].se);
+                        uin(dleft, com2[k].se);
+                        uin(dleft, com2[l].se);
+                        uax(dright, com2[i].se);
+                        uax(dright, com2[j].se);
+                        uax(dright, com2[k].se);
+                        uax(dright, com2[l].se);
+                        uax(area, (ddown - dup + 1) * (dright - dleft + 1));
+                    }
+                }
+            }
+        }
+        cout << area << "\n";
+        return;
+    }
+    assert(0);
+}
+
+int main() {
+    cin.tie(nullptr)->sync_with_stdio(false);
+    freopen("set_cover_input.txt", "r", stdin);
+    freopen("set_cover_output.txt", "w", stdout);
+    init();
+    int T = 1;
+    cin >> T;
+    for(int t = 1; t <= T; t++) {
+        cout << "Case #" << t << ": ";
+        solve();
+    }
+}

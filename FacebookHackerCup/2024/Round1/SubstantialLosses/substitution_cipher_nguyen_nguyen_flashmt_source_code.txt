@@ -1,0 +1,149 @@
+#include <bits/stdc++.h>
+#ifdef LOCAL
+#include "Debug.h"
+#else
+#define debug(...) 42
+#endif
+using namespace std;
+const vector<int> BASE = {998244353, 989991077};
+
+vector<int> calc(string s)
+{
+  int n = size(s);
+  for (int i = 0; i < n; i++)
+    if (s[i] == '?')
+      s[i] = '1';
+
+  vector<int> res;
+  for (int base : BASE)
+  {
+    vector<int> f(n + 1);
+    f[n] = 1;
+    for (int i = n - 1; i >= 0; i--)
+    {
+      assert(f[i] == 0);
+      if (s[i] != '0')
+        f[i] += f[i + 1];
+
+      if (i + 1 < n)
+      {
+        int c = (s[i] - '0') * 10 + s[i + 1] - '0';
+        if (c >= 10 && c <= 26)
+        {
+          f[i] += f[i + 2];
+          if (f[i] >= base)
+            f[i] -= base;
+        }
+      }
+    }
+
+    res.push_back(f[0]);
+  }
+
+  return res;
+}
+
+int main()
+{
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  int test;
+  cin >> test;
+  for (int iTest = 1; iTest <= test; iTest++)
+  {
+    cerr << "Running test " << iTest << endl;
+    string s;
+    int k;
+    cin >> s >> k;
+    int goal = calc(s)[0];
+
+    int n = size(s);
+
+    // refine
+    for (int i = 0; i < n; i++)
+      if (s[i] >= '7' && s[i] <= '9' && i && s[i - 1] == '?')
+        s[i - 1] = '1';
+
+    vector<pair<int, int>> id;
+    vector<int> ways;
+    int curWay = 1;
+    for (int i = n - 1; i >= 0; i--)
+      if (s[i] == '?')
+      {
+        if (i == n - 1 || (i + 2 < n && s[i + 2] == '0'))
+        {
+          if (i && s[i - 1] == '?') // 15
+          {
+            if (curWay >= k)
+            {
+              s[i - 1] = '2';
+              s[i] = '6';
+            }
+            else
+            {
+              s[i - 1] = s[i] = '1';
+              id.push_back({i - 1, i});
+              ways.push_back(curWay);
+              curWay *= 15;
+            }
+          }
+          else if (i && s[i - 1] == '2') // 6
+          {
+            if (curWay >= k) s[i] = '6';
+            else
+            {
+              s[i] = '1';
+              id.push_back({i, i});
+              ways.push_back(curWay);
+              curWay *= 6;
+            }
+          }
+          else // 9
+          {
+            if (curWay >= k) s[i] = '9';
+            else
+            {
+              s[i] = '1';
+              id.push_back({i, i});
+              ways.push_back(curWay);
+              curWay *= 9;
+            }
+          }
+        }
+        else // 2
+        {
+          if (curWay >= k) s[i] = '2';
+          else
+          {
+            s[i] = '1';
+            id.push_back({i, i});
+            ways.push_back(curWay);
+            curWay *= 2;
+          }
+        }
+      }
+
+    k = curWay - k;
+
+    for (int i = int(size(id)) - 1; i >= 0; i--)
+    {
+      int x = k / ways[i];
+      k %= ways[i];
+      auto [u, v] = id[i];
+      if (u == v) s[u] += x;
+      else
+      {
+        if (x < 9) s[v] += x;
+        else
+        {
+          s[u]++;
+          s[v] += x - 9;
+        }
+      }
+    }
+
+    int sWays = calc(s)[0];
+    cout << "Case #" << iTest << ": " << s << ' ' << sWays << endl;
+    assert(sWays == goal);
+  }
+}

@@ -1,0 +1,36 @@
+Cho một dãy số a gồm N số nguyên dương. 
+
+Ta xét tất cả các tập hợp con không rỗng của dãy a và tính bội chung nhỏ nhất của chúng. Hãy cho biết tổng của tất cả các bội chung là bao nhiêu ? 
+
+Vì kết quả rất lớn nên ta lấy phần dư của kết quả cho 10^9 + 7. 
+
+Giới hạn: 1 <= N <= 100, 1 <= a[i] <= 500 
+
+Input: 
+. Dòng đâu tiên gồm một số nguyên dương T là số lượng bộ test (1 <= T <= 40) 
+. Các bộ test sau được tổ chức như sau: 
+  + Dòng 1 gồm 1 số nguyên dương N 
+  + N dòng sau, mỗi dòng gồm N số nguyên dương, số thứ i có giá trị a[i] 
+
+Output: 
+. Gồm T dòng, mỗi dòng gồm 1 số nguyên dương duy nhất là đáp án bài toán. 
+
+Ví dụ: 
+
+Input: 
+
+4 5
+1 1 1 1 1
+3
+1 2 3
+6
+4 4 4 2 2 2
+10
+9 5 12 58 1 85 24 90 100 99
+
+Output: 
+
+31
+23
+238
+651657343

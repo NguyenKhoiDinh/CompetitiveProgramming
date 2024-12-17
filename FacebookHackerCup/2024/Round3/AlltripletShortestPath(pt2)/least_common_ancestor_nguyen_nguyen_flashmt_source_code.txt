@@ -1,0 +1,115 @@
+#include <bits/stdc++.h>
+#ifdef LOCAL
+#include "Debug.h"
+#else
+#define debug(...) 42
+#endif
+using namespace std;
+const int N = 3e6 + 5;
+const int BASE = 998244353;
+
+vector<int> a[N], id, ancAns, desAns;
+int p[N], cnt[N];
+string names[N];
+int dfsTime, preDfs[N], postDfs[N];
+set<pair<int, int>> s;
+map<int, int> subtreeCnt[N];
+set<pair<int, int>> subtreeSet[N];
+
+void dfs(int x)
+{
+  preDfs[x] = ++dfsTime;
+
+  if (!empty(s))
+    ancAns[x] = begin(s)->second;
+
+  int v = id[x];
+
+  if (cnt[v])
+    s.erase({cnt[v], v});
+  cnt[v]++;
+  s.insert({cnt[v], v});
+
+  for (int y : a[x])
+  {
+    dfs(y);
+    if (size(subtreeCnt[y]) > size(subtreeCnt[x]))
+    {
+      swap(subtreeCnt[x], subtreeCnt[y]);
+      swap(subtreeSet[x], subtreeSet[y]);
+    }
+    for (auto [k, v] : subtreeCnt[y])
+    {
+      int curCount = subtreeCnt[x][k];
+      if (curCount)
+        subtreeSet[x].erase({curCount, k});
+      subtreeCnt[x][k] += v;
+      subtreeSet[x].insert({curCount + v, k});
+    }
+  }
+
+  s.erase({cnt[v], v});
+  cnt[v]--;
+  if (cnt[v])
+    s.insert({cnt[v], v});
+  postDfs[x] = dfsTime;
+
+  if (!empty(subtreeSet[x]))
+    desAns[x] = begin(subtreeSet[x])->second;
+
+  int curCount = subtreeCnt[x][v];
+  if (curCount)
+    subtreeSet[x].erase({curCount, v});
+  subtreeCnt[x][v]++;
+  subtreeSet[x].insert({curCount + 1, v});
+}
+
+int main()
+{
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  int test;
+  cin >> test;
+  for (int iTest = 1; iTest <= test; iTest++)
+  {
+    cerr << "Running test " << iTest << endl;
+    int n;
+    cin >> n;
+    vector<string> allNames;
+    for (int i = 0; i < n; i++)
+    {
+      a[i].clear();
+      subtreeCnt[i].clear();
+      subtreeSet[i].clear();
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+      cin >> p[i] >> names[i];
+      allNames.push_back(names[i]);
+      if (p[i] > 0)
+        a[--p[i]].push_back(i);
+    }
+    sort(begin(allNames), end(allNames));
+    int cntName = unique(begin(allNames), end(allNames)) - begin(allNames);
+    allNames.resize(cntName);
+    id.resize(n);
+    for (int i = 0; i < n; i++)
+      id[i] = lower_bound(begin(allNames), end(allNames), names[i]) - begin(allNames);
+
+    dfsTime = 0;
+    fill(cnt, cnt + cntName, 0);
+    ancAns.assign(n, -1);
+    desAns.assign(n, -1);
+    s.clear();
+    dfs(0);
+
+    long long hash = 0;
+    for (int i = 0; i < n; i++)
+    {
+      hash = (hash * (cntName + 1) % BASE + ancAns[i] + 1) % BASE;
+      hash = (hash * (cntName + 1) % BASE + desAns[i] + 1) % BASE;
+    }
+    cout << "Case #" << iTest << ": " << hash << endl;
+  }
+}

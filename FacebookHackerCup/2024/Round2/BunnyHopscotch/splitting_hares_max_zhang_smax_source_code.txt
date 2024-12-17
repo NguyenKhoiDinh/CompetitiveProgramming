@@ -1,0 +1,198 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// clang-format off
+#ifdef LOCAL
+#define DEBUG(...) debug(#__VA_ARGS__, __VA_ARGS__)
+#else
+#define DEBUG(...) 6
+#endif
+
+template<typename T, typename S> ostream& operator << (ostream &os, const pair<T, S> &p) {return os << "(" << p.first << ", " << p.second << ")";}
+template<typename C, typename T = decay<decltype(*begin(declval<C>()))>, typename enable_if<!is_same<C, string>::value>::type* = nullptr>
+ostream& operator << (ostream &os, const C &c) {bool f = true; os << "["; for (const auto &x : c) {if (!f) os << ", "; f = false; os << x;} return os << "]";}
+template<typename T> void debug(string s, T x) {cerr << "\033[1;35m" << s << "\033[0;32m = \033[33m" << x << "\033[0m\n";}
+template<typename T, typename... Args> void debug(string s, T x, Args... args) {for (int i=0, b=0; i<(int)s.size(); i++) if (s[i] == '(' || s[i] == '{') b++; else
+if (s[i] == ')' || s[i] == '}') b--; else if (s[i] == ',' && b == 0) {cerr << "\033[1;35m" << s.substr(0, i) << "\033[0;32m = \033[33m" << x << "\033[31m | "; debug(s.substr(s.find_first_not_of(' ', i + 1)), args...); break;}}
+// clang-format on
+
+int calc_dp(const vector<int> &w) {
+  int n = (int)w.size();
+  vector<int> dp(n + 1, 1e9);
+  dp[0] = 0;
+  for (int i = 2; i <= n; i++) {
+    dp[i] = min(dp[i], dp[i - 2] + w[i - 1] - w[i - 2]);
+    if (i >= 3)
+      dp[i] = min(dp[i], dp[i - 3] + w[i - 1] - w[i - 3]);
+  }
+  return dp[n];
+}
+
+void test_case() {
+  int n;
+  cin >> n;
+  vector<int> w(n), c(n);
+  for (auto &x : w)
+    cin >> x;
+  for (auto &x : c) {
+    cin >> x;
+    x--;
+  }
+
+  vector<vector<pair<int, int>>> groups(n);
+  vector<vector<int>> free(n);
+  for (int i = 0; i < n; i++) {
+    if (w[i] == -1)
+      free[c[i]].push_back(i);
+    else
+      groups[c[i]].emplace_back(w[i], i);
+  }
+
+  vector<int> ord;
+  for (int x = 0; x < n; x++) {
+    if (groups[x].size() + free[x].size() > 3) {
+      cout << "No" << '\n';
+      return;
+    }
+    if (!groups[x].empty()) {
+      sort(groups[x].begin(), groups[x].end());
+      ord.push_back(x);
+    }
+  }
+
+  sort(ord.begin(), ord.end(),
+       [&](int x, int y) { return groups[x][0] < groups[y][0]; });
+  for (int i = 1; i < (int)ord.size(); i++) {
+    if (groups[ord[i - 1]].back() > groups[ord[i]][0]) {
+      cout << "No" << '\n';
+      return;
+    }
+  }
+
+  // greedily assign first inside, then as leftmost as possible
+  int score_so_far = 0;
+  vector<int> wts;
+  for (int i = 0; i < (int)ord.size(); i++) {
+    int x = ord[i];
+    if (!wts.empty() && wts.back() >= groups[x][0].first) {
+      cout << "No" << '\n';
+      return;
+    }
+    if (free[x].empty()) {
+      score_so_far += groups[x].back().first - groups[x].front().first;
+      for (const auto &p : groups[x])
+        wts.push_back(p.first);
+    } else if (free[x].size() == 1) {
+      if (groups[x].size() == 2 &&
+          groups[x][0].first + 1 < groups[x][1].first) {
+        // put in between
+        DEBUG("in between", x);
+        score_so_far += groups[x][1].first - groups[x][0].first;
+        wts.push_back(groups[x][0].first);
+        if (wts.size() == 1) {
+          wts.push_back(groups[x][1].first - 1);
+          w[free[x][0]] = groups[x][1].first - 1;
+        } else {
+          int d = groups[x][0].first - wts[wts.size() - 2];
+          wts.push_back(min(groups[x][0].first + d, groups[x][1].first - 1));
+          w[free[x][0]] = min(groups[x][0].first + d, groups[x][1].first - 1);
+        }
+        wts.push_back(groups[x][1].first);
+      } else if ((wts.empty() && groups[x][0].first > 1) ||
+                 (!wts.empty() && wts.back() < groups[x][0].first - 1)) {
+        // try left
+        score_so_far += groups[x].size();
+        wts.push_back(groups[x][0].first - 1);
+        wts.push_back(groups[x][0].first);
+        if (groups[x].size() == 2)
+          wts.push_back(groups[x][1].first);
+        w[free[x][0]] = groups[x][0].first - 1;
+        if (calc_dp(wts) != score_so_far) {
+          // put it to the right instead
+          wts.erase(wts.end() - 2 - (groups[x].size() == 2));
+          wts.push_back(groups[x].back().first + 1);
+          w[free[x][0]] = groups[x].back().first + 1;
+        }
+      } else {
+        // must be right
+        score_so_far += groups[x].size();
+        wts.push_back(groups[x][0].first);
+        if (groups[x].size() == 2)
+          wts.push_back(groups[x][1].first);
+        wts.push_back(groups[x].back().first + 1);
+        w[free[x][0]] = groups[x].back().first + 1;
+      }
+    } else {
+      assert(free[x].size() == 2);
+      assert(groups[x].size() == 1);
+      score_so_far += 2;
+      if ((wts.empty() && groups[x][0].first > 2) ||
+          (!wts.empty() && wts.back() < groups[x][0].first - 2)) {
+        // try 2 left
+        wts.push_back(groups[x][0].first - 2);
+        wts.push_back(groups[x][0].first - 1);
+        wts.push_back(groups[x][0].first);
+        w[free[x][0]] = groups[x][0].first - 2;
+        w[free[x][1]] = groups[x][0].first - 1;
+        if (calc_dp(wts) == score_so_far)
+          continue;
+        wts.erase(wts.end() - 3, wts.end());
+      }
+      if ((wts.empty() && groups[x][0].first > 1) ||
+          (!wts.empty() && wts.back() < groups[x][0].first - 1)) {
+        // try 1 left 1 right
+        wts.push_back(groups[x][0].first - 1);
+        wts.push_back(groups[x][0].first);
+        wts.push_back(groups[x][0].first + 1);
+        w[free[x][0]] = groups[x][0].first - 1;
+        w[free[x][1]] = groups[x][0].first + 1;
+        if (calc_dp(wts) == score_so_far)
+          continue;
+        wts.erase(wts.end() - 3, wts.end());
+      }
+      // must be 2 right
+      wts.push_back(groups[x][0].first);
+      wts.push_back(groups[x][0].first + 1);
+      wts.push_back(groups[x][0].first + 2);
+      w[free[x][0]] = groups[x][0].first + 1;
+      w[free[x][1]] = groups[x][0].first + 2;
+    }
+  }
+
+  // put the remaining fully free groups super super far to the right
+  int nxt = 2000;
+  for (int x = 0; x < n; x++)
+    if (groups[x].empty() && !free[x].empty()) {
+      for (int i : free[x]) {
+        wts.push_back(nxt);
+        w[i] = nxt++;
+      }
+      nxt += 10;
+      score_so_far += free[x].size() - 1;
+    }
+  DEBUG(wts, score_so_far, calc_dp(wts));
+
+  // run the dp again to check validity
+  if (calc_dp(wts) != score_so_far) {
+    cout << "No" << '\n';
+    return;
+  }
+
+  cout << "Yes" << '\n';
+  for (int i = 0; i < n; i++)
+    cout << w[i] << " \n"[i == n - 1];
+}
+
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  int t = 1;
+  cin >> t;
+  for (int i = 1; i <= t; i++) {
+    cout << "Case #" << i << ": ";
+    test_case();
+  }
+
+  return 0;
+}
